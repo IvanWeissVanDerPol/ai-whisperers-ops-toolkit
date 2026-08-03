@@ -1,0 +1,19 @@
+{
+  "name": "daily_todo_list",
+  "created_at": "2026-08-03T16:59:59.549789+00:00",
+  "versions": {
+    "v1": {
+      "registered_at": "2026-08-03T16:59:59.549810+00:00",
+      "size_bytes": 610,
+      "notes": "R20: auto-registered from cron jobs.json"
+    }
+  },
+  "tags": {
+    "stable": {
+      "version": "v1",
+      "tagged_at": "2026-08-03T16:59:59.549810+00:00"
+    }
+  },
+  "latest": "v1",
+  "updated_at": "2026-08-03T16:59:59.549810+00:00"
+}

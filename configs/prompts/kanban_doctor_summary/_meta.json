@@ -1,0 +1,19 @@
+{
+  "name": "kanban_doctor_summary",
+  "created_at": "2026-08-03T15:46:26.817229+00:00",
+  "versions": {
+    "v1": {
+      "registered_at": "2026-08-03T15:46:26.817250+00:00",
+      "size_bytes": 243,
+      "notes": "Initial registration from R17 audit"
+    }
+  },
+  "tags": {
+    "stable": {
+      "version": "v1",
+      "tagged_at": "2026-08-03T15:46:26.817250+00:00"
+    }
+  },
+  "latest": "v1",
+  "updated_at": "2026-08-03T15:46:26.817250+00:00"
+}
