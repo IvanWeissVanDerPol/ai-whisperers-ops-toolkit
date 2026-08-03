@@ -1,0 +1,44 @@
+# Secrets / credentials — never commit
+.env
+.env.local
+*.pem
+*.key
+*.secret
+
+# State — never commit (regenerated on each host)
+state/traces/
+state/prompts/*/v*.md
+state/prompt_version_map.jsonl
+state/llm_traces/
+state/usage/
+state/eval_results/
+memories/MEMORY.md
+cron/state/
+
+# OS / IDE
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*~
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Logs
+*.log
+logs/
+
+# Virtualenv
+.venv/
+venv/
+
+# Build / dist
+build/
+dist/
+*.egg-info/
+
+# Local config that varies per host
+.env.example
+# but DO commit the example
+!configs/env.example

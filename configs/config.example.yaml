@@ -1,0 +1,1817 @@
+# Sanitized config.yaml — replace placeholders with your actual values
+# Source: /root/.hermes/config.yaml (DO NOT commit real .env)
+
+model:
+  default: MiniMax-M3
+  provider: minimax-oauth
+  base_url: https://api.minimax.io/anthropic
+providers:
+  cerebras:
+    api_key: ${CEREBRAS_API_KEY}
+    base_url: https://api.cerebras.ai/v1
+    name: cerebras
+  elevenlabs:
+    api_key: ${ELEVENLABS_API_KEY}
+    name: elevenlabs
+  fal:
+    api_key: ${FAL_KEY}
+    base_url: https://queue.fal.run/
+    name: fal
+  featherless:
+    api_key: ${FEATHERLESS_API_KEY}
+    base_url: https://api.featherless.ai/v1
+    name: featherless
+  huggingface:
+    api_key: ${HUGGINGFACE_API_KEY}
+    base_url: https://router.huggingface.co/v1
+    name: huggingface
+  zai:
+    api_key: ${ZAI_API_KEY}
+    base_url: https://api.z.ai/api/paas/v4
+    name: zai
+  litellm:
+    api: http://72.61.44.159:4000/v1
+    api_key: ${LITELLM_API_KEY}
+    name: litellm
+  nous-portal:
+    api: https://portal.nousresearch.com/v1
+    api_key: ${NOUS_PORTAL_KEY}
+    name: nous-portal
+  sambanova:
+    api_key: ${SAMBANOVA_API_KEY}
+    base_url: https://api.sambanova.ai/v1
+    name: sambanova
+  siliconflow:
+    api_key: ${SILICONFLOW_API_KEY}
+    base_url: https://api.siliconflow.com/v1
+    name: siliconflow
+  together:
+    api_key: ${TOGETHER_API_KEY}
+    base_url: https://api.together.xyz/v1
+    name: together
+fallback_providers: []
+credential_pool_strategies:
+  anthropic: fill_first
+  deepseek: fill_first
+toolsets:
+  - hermes-cli
+agent:
+  max_turns: 180
+  gateway_timeout: 2400
+  restart_drain_timeout: 60
+  api_max_retries: 3
+  service_tier: ''
+  tool_use_enforcement: auto
+  task_completion_guidance: true
+  parallel_tool_call_guidance: true
+  environment_probe: true
+  environment_hint: ''
+  coding_context: auto
+  verify_on_stop: false
+  gateway_timeout_warning: 900
+  clarify_timeout: 600
+  gateway_notify_interval: 600
+  gateway_auto_continue_freshness: 3600
+  image_input_mode: auto
+  disabled_toolsets: []
+  reasoning_effort: medium
+terminal:
+  backend: local
+  modal_mode: auto
+  cwd: /root
+  timeout: 180
+  daemon_term_grace_seconds: 2.0
+  env_passthrough: []
+  home_mode: auto
+  shell_init_files: []
+  auto_source_bashrc: true
+  docker_image: nikolaik/python-nodejs:python3.11-nodejs20
+  docker_forward_env: []
+  singularity_image: docker://nikolaik/python-nodejs:python3.11-nodejs20
+  modal_image: nikolaik/python-nodejs:python3.11-nodejs20
+  daytona_image: nikolaik/python-nodejs:python3.11-nodejs20
+  container_cpu: 1
+  container_memory: 5120
+  container_disk: 51200
+  container_persistent: true
+  docker_volumes: []
+  docker_mount_cwd_to_workspace: false
+  docker_extra_args: []
+  docker_run_as_host_user: false
+  persistent_shell: true
+  vercel_runtime: node24
+web:
+  backend: brave-free
+  search_backend: brave-free
+  extract_backend: exa
+  use_gateway: true
+browser:
+  inactivity_timeout: 120
+  command_timeout: 30
+  record_sessions: false
+  allow_private_urls: true
+  engine: auto
+  auto_local_for_private_urls: true
+  cdp_url: ''
+  dialog_policy: must_respond
+  dialog_timeout_s: 300
+  camofox:
+    managed_persistence: true
+    user_id: ''
+    session_key: ''
+    adopt_existing_tab: false
+    rewrite_loopback_urls: false
+    loopback_host_alias: host.docker.internal
+  cloud_provider: browser-use
+  use_gateway: true
+checkpoints:
+  enabled: true
+  max_snapshots: 100
+  max_total_size_mb: 1000
+  max_file_size_mb: 20
+  auto_prune: true
+  retention_days: 30
+  delete_orphans: true
+  min_interval_hours: 12
+  auto_resume: true
+  auto_resume_threshold: 50
+file_read_max_chars: 100000
+mcp_discovery_timeout: 1.5
+mcp:
+  arxiv:
+    args:
+      - -y
+      - arxiv-mcp-server@1.0.1
+    command: npx
+    enabled: true
+    tools:
+      include:
+        - search
+        - fetch_paper
+      prompts: false
+      resources: false
+  atlassian:
+    args:
+      - -y
+      - '@sooperset/mcp-atlassian'
+    command: npx
+    enabled: true
+    env:
+      CONFLUENCE_URL: ${CONFLUENCE_URL:-}
+      CONFLUENCE_USERNAME: ${CONFLUENCE_USERNAME:-}
+      CONFLUENCE_API_TOKEN: ${CONFLUENCE_API_TOKEN:-}
+      JIRA_URL: ${JIRA_URL:-}
+      JIRA_USERNAME: ${JIRA_USERNAME:-}
+      JIRA_API_TOKEN: ${JIRA_API_TOKEN:-}
+    tools:
+      include:
+        - search_issues
+        - get_issue
+        - create_issue
+        - update_issue
+        - add_comment
+      prompts: false
+      resources: false
+  cesium:
+    args:
+      - -y
+      - '@cesium/mcp-server'
+    command: npx
+    enabled: false
+    notes: Bridge to Cesium ion (free 5 GB tier). Provides asset query + terrain +
+      imagery tools.
+    tools:
+      include:
+        - asset_query
+        - imagery_query
+        - terrain_height
+      prompts: false
+      resources: false
+  blender:
+    args:
+      - --from
+      - blender-mcp
+    command: uvx
+    enabled: false
+    notes: Live bridge to Blender MCP addon running on localhost:9876. See lqv-bundle
+      docs.
+    tools:
+      include:
+        - scene
+        - render
+        - objects
+        - materials
+      prompts: false
+      resources: false
+  brave-search:
+    args:
+      - -y
+      - '@brave/brave-search-mcp-server@2.0.83'
+    command: npx
+    enabled: true
+    env:
+      BRAVE_API_KEY: ${BRAVE_API_KEY}
+  cloudflare:
+    args:
+      - -y
+      - '@cloudflare/mcp-server-cloudflare@0.2.0'
+    command: npx
+    enabled: true
+    env:
+      CLOUDFLARE_API_TOKEN: REPLACE_ME
+    tools:
+      prompts: false
+      resources: false
+  unreal:
+    args:
+      - -y
+      - '@chir24/unreal-mcp'
+    command: npx
+    enabled: false
+    notes: Bridge to UE5.7 via ChiR24/Unreal_mcp automation-bridge plugin.
+    tools:
+      include:
+        - actor
+        - level
+        - blueprint
+        - material
+      prompts: false
+      resources: false
+  context7:
+    args:
+      - -y
+      - '@upstash/context7-mcp@3.1.0'
+    command: npx
+  exa:
+    args:
+      - -y
+      - exa-mcp-server@3.0.4
+    command: npx
+    enabled: true
+  filesystem:
+    args:
+      - -y
+      - '@modelcontextprotocol/server-filesystem@2026.1.14'
+    command: npx
+    enabled: true
+    tools:
+      prompts: false
+      resources: false
+  github:
+    args:
+      - -y
+      - '@modelcontextprotocol/server-github@2025.4.8'
+    command: npx
+    enabled: true
+    env:
+      GITHUB_PERSONAL_ACCESS_TOKEN: ${GITHUB_TOKEN}
+    tools:
+      prompts: false
+      resources: false
+  google-drive:
+    args:
+      - -y
+      - '@modelcontextprotocol/server-google-drive'
+    command: npx
+    enabled: true
+    env:
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+      GOOGLE_REFRESH_TOKEN: ${GOOGLE_REFRESH_TOKEN:-}
+    tools:
+      include:
+        - list_files
+        - search_files
+        - read_file
+        - create_file
+        - update_file
+        - share_file
+      prompts: false
+      resources: false
+  memory-server:
+    args:
+      - -y
+      - '@modelcontextprotocol/server-memory@2026.1.26'
+    command: npx
+    enabled: true
+    tools:
+      prompts: false
+      resources: false
+  obsidian:
+    args:
+      - -y
+      - mcp-obsidian
+    command: npx
+    enabled: true
+    env:
+      OBSIDIAN_VAULT_PATH: ${OBSIDIAN_VAULT_PATH:-/root/obsidian-vault}
+    tools:
+      include:
+        - read_note
+        - search_notes
+        - list_notes
+        - create_note
+        - update_note
+      prompts: false
+      resources: false
+  postgres:
+    args:
+      - -y
+      - '@modelcontextprotocol/server-postgres@0.6.2'
+      - postgresql://postgres:***@localhost:5432/postgres
+    command: npx
+    enabled: true
+    tools:
+      include:
+        - query
+      prompts: false
+      resources: false
+  puppeteer:
+    args:
+      - -y
+      - '@modelcontextprotocol/server-puppeteer@2025.5.12'
+    command: npx
+    enabled: true
+    tools:
+      prompts: false
+      resources: false
+  sequential-thinking:
+    args:
+      - -y
+      - '@REPLACE_ME@2025.12.18'
+    command: npx
+    enabled: true
+  slack:
+    args:
+      - -y
+      - '@modelcontextprotocol/server-slack'
+    command: npx
+    enabled: true
+    env:
+      SLACK_BOT_TOKEN: ${SLACK_BOT_TOKEN:-}
+      SLACK_TEAM_ID: ${SLACK_TEAM_ID:-}
+    tools:
+      include:
+        - list_channels
+        - post_message
+        - reply_to_thread
+        - search_messages
+      prompts: false
+      resources: false
+  stripe:
+    args:
+      - -y
+      - '@stripe/mcp@0.7.0'
+    command: npx
+    enabled: true
+    env:
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
+    tools:
+      prompts: false
+      resources: false
+  supabase:
+    enabled: true
+    headers:
+      Authorization: Bearer sbp_68...16f0
+    tools:
+      prompts: false
+      resources: false
+    url: https://mcp.supabase.com/mcp?project_ref=qyvokpribmbrosafntqa
+  himalaya-email:
+    args:
+      - -y
+      - himalaya-mcp
+    command: npx
+    enabled: true
+    env:
+      HIMALAYA_CONFIG_PATH: ${HIMALAYA_CONFIG_PATH:-/root/.config/himalaya/config.toml}
+    notes: Terminal email client — IMAP/SMTP from inside Hermes. Useful for invoices,
+      client comms.
+    tools:
+      include:
+        - list
+        - read
+        - send
+        - search
+      prompts: false
+      resources: false
+  onepassword:
+    args:
+      - -y
+      - '@modelcontextprotocol/server-1password'
+    command: npx
+    enabled: true
+    env:
+      OP_SERVICE_ACCOUNT_TOKEN: ${OP_SERVICE_ACCOUNT_TOKEN:-}
+    notes: 1Password secret rotation — required for hermes-ops-health pattern. No-op
+      if token missing.
+    tools:
+      include:
+        - get_secret
+        - list_vaults
+        - list_items
+      prompts: false
+      resources: false
+  wikipedia:
+    args:
+      - -y
+      - wikipedia-mcp@1.0.0
+    command: npx
+    enabled: true
+  servers:
+    hubspot:
+      command: npx
+      args:
+        - -y
+        - '@hubspot/mcp-server@0.4.0'
+      enabled: false
+      env:
+        HUBSPOT_ACCESS_TOKEN: ${env:HUBSPOT_ACCESS_TOKEN}
+        HUBSPOT_REFRESH_TOKEN: ${env:HUBSPOT_REFRESH_TOKEN}
+      tools:
+        include:
+          - crm.objects.contacts
+          - crm.objects.companies
+          - crm.objects.deals
+          - crm.search
+          - crm.schemas
+          - crm.objects.notes
+          - crm.objects.tasks
+        prompts: false
+        resources: false
+tool_output:
+  max_bytes: 50000
+  max_lines: 2000
+  max_line_length: 2000
+tool_loop_guardrails:
+  warnings_enabled: true
+  hard_stop_enabled: true
+  warn_after:
+    exact_failure: 2
+    same_tool_failure: 3
+    idempotent_no_progress: 2
+  hard_stop_after:
+    exact_failure: 4
+    same_tool_failure: 5
+    idempotent_no_progress: 3
+compression:
+  enabled: true
+  threshold: 0.3
+  target_ratio: 0.35
+  protect_last_n: 80
+  hygiene_hard_message_limit: 400
+  protect_first_n: 3
+  abort_on_summary_failure: true
+  codex_gpt55_autoraise: true
+  in_place: false
+kanban:
+  dispatch_in_gateway: false
+  dispatch_interval_seconds: 30
+  failure_limit: 3
+  worker_log_rotate_bytes: 2097152
+  worker_log_backup_count: 1
+  orchestrator_profile: ''
+  default_assignee: ''
+  auto_decompose: true
+  auto_decompose_per_tick: 3
+  dispatch_stale_timeout_seconds: 14400
+  hallucination_gate: true
+  heartbeat_interval_seconds: 15
+  zombie_detection: true
+prompt_caching:
+  cache_ttl: 5m
+  long_lived_prefix: true
+  long_lived_ttl: 1h
+openrouter:
+  response_cache: true
+  response_cache_ttl: 300
+  min_coding_score: 0.65
+bedrock:
+  region: ''
+  discovery:
+    enabled: false
+    provider_filter: []
+    refresh_interval: 3600
+  guardrail:
+    guardrail_identifier: ''
+    guardrail_version: ''
+    stream_processing_mode: async
+    trace: disabled
+auxiliary:
+  vision:
+    provider: cerebras
+    model: gemma-4-31b
+    base_url: https://api.cerebras.ai/v1
+    api_key: ''
+    timeout: 120
+    download_timeout: 30
+    max_tokens: 400
+  web_extract:
+    provider: auto
+    model: ''
+    base_url: ''
+    api_key: ''
+    timeout: 360
+  compression:
+    provider: auto
+    model: ''
+    base_url: ''
+    api_key: ''
+    timeout: 120
+  skills_hub:
+    provider: auto
+    model: ''
+    base_url: ''
+    api_key: ''
+    timeout: 30
+  approval:
+    provider: auto
+    model: ''
+    base_url: ''
+    api_key: ''
+    timeout: 30
+  mcp:
+    provider: auto
+    model: ''
+    base_url: ''
+    api_key: ''
+    timeout: 30
+  title_generation:
+    provider: auto
+    model: ''
+    base_url: ''
+    api_key: ''
+    timeout: 30
+    language: ''
+  tts_audio_tags:
+    provider: auto
+    model: ''
+    base_url: ''
+    api_key: ''
+    timeout: 30
+  triage_specifier:
+    provider: auto
+    model: ''
+    base_url: ''
+    api_key: ''
+    timeout: 120
+  kanban_decomposer:
+    provider: auto
+    model: ''
+    base_url: ''
+    api_key: ''
+    timeout: 180
+  profile_describer:
+    provider: auto
+    model: ''
+    base_url: ''
+    api_key: ''
+    timeout: 60
+  curator:
+    provider: auto
+    model: ''
+    base_url: ''
+    api_key: ''
+    timeout: 600
+  monitor:
+    provider: auto
+    model: ''
+    base_url: ''
+    api_key: ''
+    timeout: 60
+  background_review:
+    provider: auto
+    model: ''
+    base_url: ''
+    api_key: ''
+    timeout: 120
+  session_search:
+    api_key: ''
+    base_url: ''
+    extra_body: {}
+    max_concurrency: 3
+    model: ''
+    provider: auto
+    timeout: 30
+  video:
+    api_key: ''
+    base_url: ''
+    download_timeout: 30
+    extra_body: {}
+    model: ''
+    provider: auto
+    timeout: 180
+display:
+  compact: false
+  resume_display: full
+  resume_exchanges: 10
+  resume_max_user_chars: 300
+  resume_max_assistant_chars: 200
+  resume_max_assistant_lines: 3
+  resume_skip_tool_only: true
+  busy_input_mode: interrupt
+  interface: cli
+  tui_auto_resume_recent: false
+  tui_agents_nudge: true
+  bell_on_complete: true
+  show_reasoning: auto
+  reasoning_full: false
+  memory_notifications: 'on'
+  streaming: true
+  timestamps: true
+  final_response_markdown: render
+  persistent_output: true
+  persistent_output_max_lines: 200
+  persist_prompts: true
+  inline_diffs: true
+  file_mutation_verifier: true
+  credits_notices: true
+  turn_completion_explainer: true
+  show_cost: true
+  skin: default
+  language: es
+  tui_status_indicator: kaomoji
+  cli_refresh_interval: 1.0
+  user_message_preview:
+    first_lines: 2
+    last_lines: 2
+  interim_assistant_messages: true
+  tool_progress_command: true
+  tool_preview_length: 0
+  tool_progress_grouping: accumulate
+  ephemeral_system_ttl: 0
+  platforms:
+    telegram:
+      streaming: true
+      update_mode: webhook
+      webhook_path: /hermes-telegram
+      webhook_port: 8443
+    discord:
+      streaming: false
+  runtime_footer:
+    enabled: true
+    fields:
+      - model
+      - context_pct
+      - cwd
+      - cost
+  copy_shortcut: auto
+  color: true
+  input_block:
+    enabled: true
+    placeholder: Ask anything...
+  interactive: auto
+  model:
+    compact: false
+    header: true
+  rich_traceback: true
+  session:
+    compact: false
+    header: true
+  show_tool_prefix: true
+  spinner: kawaii
+  thinking:
+    enabled: true
+    max_chars: 8000
+    mode: stream
+  tool_progress: all
+  truncate_output: false
+dashboard:
+  theme: default
+  show_token_analytics: false
+  oauth:
+    client_id: ''
+    portal_url: ''
+  basic_auth:
+    username: ''
+    password_hash: ''
+    password: ''
+    secret: ''
+    session_ttl_seconds: 3600
+  public_url: ''
+  edge:
+    voice: en-US-AriaNeural
+  elevenlabs:
+    model_id: eleven_multilingual_v2
+    voice_id: 21m00Tcm4TlvDq8ikWAM
+  mistral:
+    model: voxtral-mini-tts-2603
+    voice_id: c69964a6-ab8b-4f8a-9465-ec0925096ec8
+  neutts:
+    device: cpu
+    model: neuphonic/neutts-air-q4-gguf
+    ref_audio: ''
+    ref_text: ''
+  openai:
+    model: gpt-4o-mini-tts
+    voice: alloy
+  piper:
+    voice: en_US-lessac-medium
+  provider: openai
+  redact_pii: true
+  use_gateway: true
+  xai:
+    bit_rate: 128000
+    language: en
+    sample_rate: 24000
+    voice_id: eve
+privacy:
+  redact_pii: false
+tts:
+  provider: edge
+  edge:
+    voice: en-US-AriaNeural
+  elevenlabs:
+    voice_id: pNInz6obpgDQGcFmaJgB
+    model_id: eleven_multilingual_v2
+  openai:
+    model: gpt-4o-mini-tts
+    voice: alloy
+  gemini:
+    model: gemini-2.5-flash-preview-tts
+    voice: Kore
+    audio_tags: false
+    persona_prompt_file: ''
+  xai:
+    voice_id: eve
+    language: en
+    sample_rate: 24000
+    bit_rate: 128000
+  mistral:
+    model: voxtral-mini-tts-2603
+    voice_id: c69964a6-ab8b-4f8a-9465-ec0925096ec8
+  neutts:
+    ref_audio: ''
+    ref_text: ''
+    model: neuphonic/neutts-air-q4-gguf
+    device: cpu
+  piper:
+    voice: en_US-lessac-medium
+stt:
+  enabled: true
+  provider: local
+  local:
+    model: base
+    language: ''
+  openai:
+    model: whisper-1
+  mistral:
+    model: voxtral-mini-latest
+  elevenlabs:
+    model_id: scribe_v2
+    language_code: ''
+    tag_audio_events: false
+    diarize: false
+voice:
+  record_key: ctrl+b
+  max_recording_seconds: 120
+  auto_tts: false
+  beep_enabled: true
+  silence_threshold: 200
+  silence_duration: 3
+  provider: edge
+  speed: 1
+  voice: en-US-JennyNeural
+human_delay:
+  mode: 'off'
+  min_ms: 800
+  max_ms: 2500
+context:
+  engine: compressor
+memory:
+  memory_enabled: true
+  user_profile_enabled: true
+  write_approval: false
+  memory_char_limit: 4400
+  user_char_limit: 1375
+  provider: ''
+  auto_consolidate: true
+  consolidate_threshold: 0.85
+  dedup_enabled: true
+  deriver_dedup: true
+  honcho_observation_limit: 700
+  max_entries: 500
+  prune_after_days: 90
+delegation:
+  model: openai/gpt-oss-20b:free
+  provider: openrouter
+  base_url: https://openrouter.ai/api/v1
+  api_key: ''
+  api_mode: openai_completions
+  inherit_mcp_toolsets: true
+  max_iterations: 50
+  child_timeout_seconds: 600
+  reasoning_effort: ''
+  max_concurrent_children: 5
+  max_spawn_depth: 2
+  orchestrator_enabled: true
+  subagent_auto_approve: false
+  compression:
+    api_key: ''
+    base_url: ''
+    model: openai/gpt-oss-20b:free
+    provider: openrouter
+    timeout: 120
+prefill_messages_file: ''
+goals:
+  max_turns: 180
+  default_budget: 30
+  enabled: true
+  judge_model: anthropic/claude-sonnet-4
+  judge_provider: custom:nous-portal
+  max_continuation_turns: 50
+skills:
+  external_dirs:
+    - ~/.hermes/hermes-agent/optional-skills
+  template_vars: true
+  inline_shell: false
+  inline_shell_timeout: 10
+  guard_agent_created: false
+  write_approval: false
+  auto_load:
+    - execplan-skill
+    - software-development/systematic-debugging
+    - devops/nextjs-docker-swarm
+    - devops/hermes-gateway-ops
+    - github/github-pr-workflow
+    - wondelai-skills/influence-psychology
+    - wondelai-skills/one-page-marketing
+    - wondelai-skills/obviously-awesome
+    - wondelai-skills/hundred-million-offers
+    - wondelai-skills/jobs-to-be-done
+    - wondelai-skills/scorecard-marketing
+    - wondelai-skills/cro-methodology
+    - wondelai-skills/hooked-ux
+    - wondelai-skills/made-to-stick
+    - wondelai-skills/storybrand-messaging
+  enabled: true
+  load_mode: prompt
+  optional_load_mode: prompt
+curator:
+  enabled: true
+  interval_hours: 168
+  min_idle_hours: 2
+  stale_after_days: 30
+  archive_after_days: 90
+  consolidate: false
+  prune_builtins: true
+  backup:
+    enabled: true
+    keep: 5
+  auxiliary:
+    model: deepseek-chat
+    provider: deepseek
+timezone: America/Sao_Paulo
+slack:
+  require_mention: true
+  free_response_channels: ''
+  allowed_channels: ''
+discord:
+  require_mention: true
+  free_response_channels: ''
+  allowed_channels: ''
+  auto_thread: true
+  thread_require_mention: false
+  history_backfill: true
+  history_backfill_limit: 50
+  reactions: true
+  dm_role_auth_guild: ''
+  server_actions: ''
+  allow_any_attachment: false
+  max_attachment_bytes: 33554432
+  voice_fx:
+    enabled: false
+    ambient_enabled: true
+    ambient_path: ''
+    ambient_gain: 0.18
+    duck_gain: 0.06
+    speech_gain: 1
+    ack_enabled: true
+    ack_phrases:
+      - Let me look into that.
+      - One moment.
+      - Checking on that now.
+      - Give me a sec.
+      - On it.
+whatsapp:
+  enabled: true
+  bridge_port: 3000
+  chunk_delay_ms: 300
+  dm_policy: allow
+  group_policy: open
+  max_message_length: 4096
+  mode: bot
+  reply_prefix: ''
+  require_mention: false
+  unauthorized_dm_behavior: pair
+telegram:
+  reactions: true
+  allowed_chats: '@weissvanderpol'
+  extra:
+    rich_messages: false
+  enabled: true
+  notification_mode: important
+  home_channel: '5664287858'
+mattermost:
+  require_mention: true
+  free_response_channels: ''
+  allowed_channels: ''
+matrix:
+  require_mention: true
+  free_response_rooms: ''
+  allowed_rooms: ''
+approvals:
+  mode: smart
+  timeout: 60
+  cron_mode: deny
+  mcp_reload_confirm: true
+  destructive_slash_confirm: false
+  auto_approve_patterns:
+    - ls
+    - cat
+    - head
+    - tail
+    - grep
+    - find
+    - ps
+    - top
+    - df
+    - du
+    - git status
+    - git log
+    - git diff
+    - git show
+    - git branch
+  require_approval_for:
+    - rm -rf
+    - git push --force
+    - git push -f
+    - git reset --hard
+    - DROP TABLE
+    - DROP DATABASE
+    - TRUNCATE
+    - DELETE FROM
+    - hermes secrets reset
+    - hermes auth logout
+    - systemctl stop
+    - docker system prune
+    - kill -9
+    - mkfs
+    - dd if=
+  warn_on:
+    - 'rm '
+    - chmod 777
+    - chown -R
+    - apt remove
+    - pip uninstall
+    - npm uninstall -g
+    - git commit --amend
+    - git rebase
+command_allowlist:
+  - world/other-writable permissions
+  - in-place edit of system config
+  - git force push (rewrites remote history)
+  - xargs with rm
+  - sudo with combined-flag privilege escalation
+  - hermes update (restarts gateway, kills running agents)
+  - recursive chown to root
+  - sudo with privilege flag (stdin/askpass/shell/list)
+  - overwrite project env/config via redirection
+  - recursive delete
+  - kill hermes/gateway process (self-termination)
+  - delete in root path
+  - execute_code
+  - stop/restart hermes gateway (kills running agents)
+  - overwrite system file via redirection
+  - SQL DROP
+  - git branch force delete
+  - find -delete
+  - shell command via -c/-lc flag
+  - chmod +x followed by immediate execution
+  - overwrite project env/config file
+  - script execution via heredoc
+  - tirith:plain_http_to_sink
+  - git reset --hard (destroys uncommitted changes)
+  - docker restart/stop/kill (container lifecycle)
+  - copy/move file into /etc/
+  - force kill processes
+  - kill process via pgrep expansion (self-termination)
+  - copy/move file into system config path
+  - script execution via -e/-c flag
+  - stop/restart system service
+  - overwrite system config
+hooks:
+  on_session_end:
+    - command: /root/.hermes/hooks/pr-watcher/handler.py
+      timeout: 10
+  on_session_start:
+    - command: /root/.hermes/hooks/activity-logger/handler.py
+      timeout: 3
+  post_llm_call:
+    - command: /root/.hermes/hooks/activity-logger/handler.py
+      timeout: 3
+  post_tool_call:
+    - command: /root/.hermes/hooks/activity-logger/handler.py
+      timeout: 3
+    - command: /root/.hermes/hooks/error-tracker/handler.py
+      timeout: 3
+    - command: /root/.hermes/hooks/long-task-alert/handler.py
+      timeout: 3
+    - command: /root/.hermes/hooks/lqv/post-shell-vastai.py
+      timeout: 5
+  pre_llm_call:
+    - command: /root/.hermes/hooks/activity-logger/handler.py
+      timeout: 3
+  pre_tool_call:
+    - command: /root/.hermes/hooks/activity-logger/handler.py
+      timeout: 3
+    - command: /root/.hermes/hooks/pre-destructive-snapshot.sh
+      timeout: 5
+    - command: /root/.hermes/hooks/lqv/auto-track-splats.py
+      timeout: 5
+hooks_auto_accept:
+  on_error: true
+  on_interrupt: false
+  on_session_end: true
+  on_session_start: true
+  post_llm_call: false
+  post_tool_call: false
+  pre_destructive_snapshot: true
+  pre_llm_call: true
+  pre_tool_call: false
+security:
+  allow_private_urls: true
+  redact_secrets: true
+  tirith_enabled: true
+  tirith_path: tirith
+  tirith_timeout: 5
+  tirith_fail_open: true
+  website_blocklist:
+    enabled: true
+    domains: []
+    shared_files: []
+  acked_advisories: []
+  allow_lazy_installs: true
+  cron_scan_skills: true
+  prompt_injection_scan: true
+  smart_model_routing:
+    cheap_model:
+      model: openai/gpt-4o-mini
+      provider: nous
+    enabled: false
+    max_simple_chars: 160
+    max_simple_words: 28
+cron:
+  provider: ''
+  chronos:
+    portal_url: https://portal.nousresearch.com
+    callback_url: ''
+    expected_audience: ''
+    nas_jwks_url: ''
+  wrap_response: true
+code_execution:
+  mode: project
+tools:
+  tool_search:
+    enabled: auto
+    threshold_pct: 10
+    search_default_limit: 5
+    max_search_limit: 20
+logging:
+  level: INFO
+  max_size_mb: 5
+  backup_count: 3
+  levels:
+    gateway:
+      run: info
+    tools:
+      mcp_tool: info
+    tools.mcp_tool: info
+model_catalog:
+  enabled: true
+  url: https://hermes-agent.nousresearch.com/docs/api/model-catalog.json
+  ttl_hours: 1
+  providers:
+    - featherless
+    - nous-portal
+    - litellm
+    - minimax-oauth
+    - openrouter
+network:
+  force_ipv4: true
+gateway:
+  message_timestamps:
+    enabled: false
+  max_inbound_media_bytes: 134217728
+  strict: true
+  media_delivery_allow_dirs: []
+  trust_recent_files: true
+  trust_recent_files_seconds: 600
+  api_server:
+    max_concurrent_runs: 10
+  platforms:
+    api_server:
+      enabled: true
+      extra:
+        host: 0.0.0.0
+        key: ${API_SERVER_KEY}
+        port: 8642
+    teams:
+      allowed_tenants: []
+      app_id: ''
+      app_password: ''
+      enabled: false
+      tenant_id: ''
+      webhook_secret: ''
+    webhook:
+      enabled: true
+      extra:
+        host: 0.0.0.0
+        port: 8644
+        routes:
+          github-prs:
+            deliver: github_comment
+            deliver_extra:
+              pr_number: '{pull_request.number}'
+              repo: '{repository.full_name}'
+            events:
+              - pull_request
+            prompt: 'PR #{pull_request.number}: {pull_request.title} by {pull_request.user.login}.
+              Branch: {pull_request.head.ref} → {pull_request.base.ref}. Review the
+              diff and post a summary of what changed, any issues found, and suggestions.'
+            secret: REPLACE_ME
+            skills:
+              - github-code-review
+        secret: REPLACE_ME
+      key: 2e8924b8-ffb1-4611-af95-b60a0155ea0d
+streaming:
+  enabled: true
+  transport: auto
+  edit_interval: 0.8
+  buffer_threshold: 24
+  cursor: ' ▉'
+  fresh_final_after_seconds: 60
+sessions:
+  auto_prune: true
+  retention_days: 180
+  vacuum_after_prune: true
+  min_interval_hours: 24
+  write_json_snapshots: false
+onboarding:
+  seen:
+    busy_input_prompt: true
+    openclaw_residue_cleanup: true
+    tool_progress_prompt: true
+  profile_build: ask
+updates:
+  pre_update_backup: quick
+  backup_keep: 10
+  non_interactive_local_changes: stash
+lsp:
+  enabled: true
+  wait_mode: document
+  wait_timeout: 10
+  install_strategy: auto
+x_search:
+  model: grok-4.20-reasoning
+  timeout_seconds: 180
+  retries: 2
+secrets:
+  bitwarden:
+    enabled: false
+    access_token_env: BWS_ACCESS_TOKEN
+    project_id: ''
+    cache_ttl_seconds: 300
+    override_existing: true
+    auto_install: true
+    server_url: ''
+paste_collapse_threshold: 5
+paste_collapse_threshold_fallback: 5
+paste_collapse_char_threshold: 2000
+computer_use:
+  cua_telemetry: false
+_config_version: 33
+activity_feed:
+  browser: true
+  enabled: true
+  file: false
+  patch_file: false
+  read_file: false
+  search_files: false
+  terminal: true
+  think: true
+  web_extract: true
+  web_search: true
+  write_file: false
+bitwarden:
+  enabled: true
+env:
+  AGENTCALL_API_KEY: ${AGENTCALL_API_KEY}
+  GITHUB_TOKEN: ${GITHUB_TOKEN}
+google:
+  workspace:
+    enabled: true
+hermes_context_manager:
+  code_filter_enabled: true
+  dashboard_port: 0
+  dedup_enabled: true
+  enabled: true
+  error_purge_enabled: true
+  max_context_percent: 0.8
+image_gen:
+  provider: fal
+  use_gateway: true
+known_plugin_toolsets:
+  cli:
+    - evey_autonomy
+    - evey_bridge
+    - evey_cache
+    - evey_cost_guard
+    - evey_council
+    - evey_delegate
+    - evey_delegation_score
+    - evey_digest
+    - evey_email_guard
+    - evey_goals
+    - evey_habits
+    - evey_identity
+    - evey_learner
+    - evey_memory
+    - evey_moltbook
+    - evey_mqtt
+    - evey_news
+    - evey_proactive
+    - evey_rag
+    - evey_reflect
+    - evey_sandbox
+    - evey_scheduler
+    - evey_session
+    - evey_status
+    - evey_telegram
+    - evey_telemetry
+    - evey_validate
+    - evey_verification
+    - evey_watchdog
+    - google_meet
+    - hermes-cli
+    - hmc_tools
+    - mnemosyne
+    - spotify
+  telegram:
+    - evey_autonomy
+    - evey_bridge
+    - evey_cache
+    - evey_cost_guard
+    - evey_council
+    - evey_delegate
+    - evey_delegation_score
+    - evey_digest
+    - evey_email_guard
+    - evey_goals
+    - evey_habits
+    - evey_identity
+    - evey_learner
+    - evey_memory
+    - evey_moltbook
+    - evey_mqtt
+    - evey_news
+    - evey_proactive
+    - evey_rag
+    - evey_reflect
+    - evey_sandbox
+    - evey_scheduler
+    - evey_session
+    - evey_status
+    - evey_telegram
+    - evey_telemetry
+    - evey_validate
+    - evey_verification
+    - evey_watchdog
+    - google_meet
+    - hermes-cli
+    - hmc_tools
+    - mnemosyne
+    - spotify
+  whatsapp:
+    - evey_autonomy
+    - evey_bridge
+    - evey_cache
+    - evey_cost_guard
+    - evey_council
+    - evey_delegate
+    - evey_delegation_score
+    - evey_digest
+    - evey_email_guard
+    - evey_goals
+    - evey_habits
+    - evey_identity
+    - evey_learner
+    - evey_memory
+    - evey_moltbook
+    - evey_mqtt
+    - evey_news
+    - evey_proactive
+    - evey_rag
+    - evey_reflect
+    - evey_sandbox
+    - evey_scheduler
+    - evey_session
+    - evey_status
+    - evey_telegram
+    - evey_telemetry
+    - evey_validate
+    - evey_verification
+    - evey_watchdog
+    - google_meet
+    - hermes-cli
+    - hmc_tools
+    - mnemosyne
+    - spotify
+model_aliases:
+  daily:
+    model: MiniMax-M3
+    provider: minimax-oauth
+  free:
+    base_url: https://openrouter.ai/api/v1
+    model: openai/gpt-oss-20b:free
+    provider: openrouter
+  fs-coder:
+    base_url: https://api.featherless.ai
+    model: Qwen/Qwen3-Coder-30B-A3B-Instruct
+    provider: featherless
+  fs-fast:
+    base_url: https://api.featherless.ai
+    model: Qwen/Qwen2.5-7B-Instruct
+    provider: featherless
+  fs-v3:
+    base_url: https://api.featherless.ai
+    model: deepseek-ai/DeepSeek-V3-0324
+    provider: featherless
+  fs-work:
+    base_url: https://api.featherless.ai
+    model: anthropic/claude-sonnet-4-6
+    provider: anthropic
+  glm-cerebras:
+    base_url: https://api.cerebras.ai/v1
+    model: zai-glm-4.7
+    provider: cerebras
+  oss-120b-cerebras:
+    base_url: https://api.cerebras.ai/v1
+    model: gpt-oss-120b
+    provider: cerebras
+  qwen-coder-free:
+    base_url: https://openrouter.ai/api/v1
+    model: qwen/qwen3-coder:free
+    provider: openrouter
+  hermes-405b-free:
+    base_url: https://openrouter.ai/api/v1
+    model: nousresearch/hermes-3-llama-3.1-405b:free
+    provider: openrouter
+  qwen-next-free:
+    base_url: https://openrouter.ai/api/v1
+    model: qwen/qwen3-next-80b-a3b-instruct:free
+    provider: openrouter
+  llama-70b-free:
+    base_url: https://openrouter.ai/api/v1
+    model: meta-llama/llama-3.3-70b-instruct:free
+    provider: openrouter
+  work:
+    model: MiniMax-M2.7
+    provider: minimax-oauth
+model_list:
+  - model: MiniMax-M3
+    provider: minimax-oauth
+  - model: MiniMax-M2.7
+    provider: minimax-oauth
+  - model: anthropic/claude-sonnet-4-6
+    provider: anthropic
+  - model: openai/gpt-oss-20b:free
+    provider: openrouter
+  - model: deepseek-ai/DeepSeek-V3-0324
+    provider: featherless
+model_routing:
+  enabled: true
+  prefer_local_for_simple: false
+notifications:
+  cron_failure: telegram
+  cron_failure_destination: '@weissvanderpol'
+  healthcheck_alert_threshold: 1
+  log_disk_full_pct: 80
+  subagent_failure: telegram
+  token_expiry_warning_days: 7
+otel:
+  backends:
+    langfuse:
+      endpoint: https://cloud.langfuse.com/api/public/otel
+      service_name: hermes-agent-agentzero
+platform_toolsets:
+  cli:
+    - browser
+    - clarify
+    - code_execution
+    - computer_use
+    - context_engine
+    - cronjob
+    - delegation
+    - evey_autonomy
+    - evey_bridge
+    - evey_cache
+    - evey_cost_guard
+    - evey_council
+    - evey_delegate
+    - evey_delegation_score
+    - evey_digest
+    - evey_email_guard
+    - evey_goals
+    - evey_habits
+    - evey_identity
+    - evey_learner
+    - evey_memory
+    - evey_moltbook
+    - evey_mqtt
+    - evey_news
+    - evey_proactive
+    - evey_rag
+    - evey_reflect
+    - evey_sandbox
+    - evey_scheduler
+    - evey_session
+    - evey_status
+    - evey_telegram
+    - evey_telemetry
+    - evey_validate
+    - evey_verification
+    - evey_watchdog
+    - file
+    - google_meet
+    - hermes-cli
+    - hmc_tools
+    - image_gen
+    - kanban
+    - memory
+    - messaging
+    - mnemosyne
+    - moa
+    - session_search
+    - skills
+    - terminal
+    - todo
+    - tts
+    - video
+    - video_gen
+    - vision
+    - web
+    - x_search
+    - yuanbao
+  telegram:
+    - browser
+    - clarify
+    - code_execution
+    - computer_use
+    - context_engine
+    - cronjob
+    - delegation
+    - evey_autonomy
+    - evey_bridge
+    - evey_cache
+    - evey_cost_guard
+    - evey_council
+    - evey_delegate
+    - evey_delegation_score
+    - evey_digest
+    - evey_email_guard
+    - evey_goals
+    - evey_habits
+    - evey_identity
+    - evey_learner
+    - evey_memory
+    - evey_moltbook
+    - evey_mqtt
+    - evey_news
+    - evey_proactive
+    - evey_rag
+    - evey_reflect
+    - evey_sandbox
+    - evey_scheduler
+    - evey_session
+    - evey_status
+    - evey_telegram
+    - evey_telemetry
+    - evey_validate
+    - evey_verification
+    - evey_watchdog
+    - file
+    - google_meet
+    - hermes-cli
+    - hmc_tools
+    - image_gen
+    - memory
+    - messaging
+    - mnemosyne
+    - moa
+    - session_search
+    - skills
+    - terminal
+    - todo
+    - tts
+    - video
+    - video_gen
+    - vision
+    - web
+    - x_search
+    - yuanbao
+  whatsapp:
+    - browser
+    - clarify
+    - code_execution
+    - computer_use
+    - context_engine
+    - cronjob
+    - delegation
+    - evey_autonomy
+    - evey_bridge
+    - evey_cache
+    - evey_cost_guard
+    - evey_council
+    - evey_delegate
+    - evey_delegation_score
+    - evey_digest
+    - evey_email_guard
+    - evey_goals
+    - evey_habits
+    - evey_identity
+    - evey_learner
+    - evey_memory
+    - evey_moltbook
+    - evey_mqtt
+    - evey_news
+    - evey_proactive
+    - evey_rag
+    - evey_reflect
+    - evey_sandbox
+    - evey_scheduler
+    - evey_session
+    - evey_status
+    - evey_telegram
+    - evey_telemetry
+    - evey_validate
+    - evey_verification
+    - evey_watchdog
+    - file
+    - google_meet
+    - hermes-cli
+    - hmc_tools
+    - image_gen
+    - memory
+    - messaging
+    - mnemosyne
+    - moa
+    - session_search
+    - skills
+    - terminal
+    - todo
+    - tts
+    - video
+    - video_gen
+    - vision
+    - web
+    - x_search
+    - yuanbao
+platforms:
+  webhook:
+    enabled: true
+    extra:
+      host: 0.0.0.0
+      port: 8644
+      secret: fleet-alerts-hmac-secret-2026
+plugins:
+  disabled: []
+  enabled:
+    - model-router
+    - agent-analytics-hermes-plugin
+    - cost_tracker
+    - evey-autonomy
+    - evey-commands
+    - evey-cost-guard
+    - evey-council
+    - evey-delegation-score
+    - evey-digest
+    - evey-email-guard
+    - evey-github
+    - evey-goals
+    - evey-habits
+    - evey-identity
+    - evey-learner
+    - evey-memory-adaptive
+    - evey-memory-consolidate
+    - evey-moltbook
+    - evey-mqtt
+    - evey-news
+    - evey-proactive
+    - evey-rag
+    - evey-reflect
+    - evey-sandbox
+    - evey-scheduler
+    - evey-session-guard
+    - evey-status
+    - evey-telegram-ux
+    - evey-telemetry
+    - evey-validate
+    - evey-verification
+    - evey-wallet
+    - evey-watchdog
+    - google_meet
+    - hermes-context-manager
+    - image_gen/openai
+    - image_gen/xai
+    - kanban
+    - memory/mnemosyne
+    - platforms/teams
+    - request_logger
+    - spotify
+    - teams_pipeline
+    - video_gen/fal
+    - video_gen/xai
+    - personality-anchor
+provider_routing:
+  data_collection: deny
+  sort: price
+provider_selector:
+  auto_select: true
+  default_profile: full-power
+  profiles:
+    - model: MiniMax-M3
+      name: full-power
+      provider: minimax-oauth
+    - model: groq-llama
+      name: cheap
+      provider: custom:litellm
+    - model: groq-llama
+      name: code
+      provider: custom:litellm
+    - model: nous-hermes-4-70b
+      name: backup-hermes
+      provider: custom:litellm
+    - model: Qwen/Qwen2.5-7B-Instruct
+      name: featherless
+      provider: custom:featherless
+    - model: openai/gpt-oss-120b
+      name: huggingface
+      provider: custom:huggingface
+    - model: meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo
+      name: together
+      provider: custom:together
+    - model: gpt-oss-120b
+      name: cerebras
+      provider: custom:cerebras
+    - model: eleven_multilingual_v2
+      name: elevenlabs
+      provider: custom:elevenlabs
+    - model: flux-pro
+      name: fal
+      provider: custom:fal
+    - model: Qwen2.5-72B-Instruct
+      name: sambanova
+      provider: custom:sambanova
+    - model: Qwen/Qwen2.5-7B-Instruct
+      name: siliconflow
+      provider: custom:siliconflow
+    - model: mimo-v2-pro
+      name: mimo-v2-pro
+      provider: openrouter
+    - model: gpt-5.4-mini
+      name: gpt-5.4-mini
+      provider: openrouter
+    - model: deepseek-v4-flash:free
+      name: deepseek-v4-flash
+      provider: openrouter
+    - model: gpt-oss-120b:free
+      name: gpt-oss-120b
+      provider: openrouter
+    - model: glm-4.5
+      name: zai
+      provider: custom:zai
+  routing_rules:
+    - match:
+        intent:
+          - classification
+          - extraction
+          - triage
+          - summary
+          - translation
+      profile: cheap
+    - match:
+        intent:
+          - write_code
+          - refactor
+          - debug
+          - code_review
+      profile: code
+    - match:
+        intent:
+          - image_analysis
+          - vision
+          - multimodal
+      profile: backup-hermes
+    - match:
+        intent:
+          - creative_writing
+          - long_form_content
+      profile: backup-hermes
+    - match:
+        intent:
+          - interactive
+          - chat
+          - conversation
+      profile: cerebras
+    - match:
+        intent:
+          - rag
+          - embedding
+          - search
+      profile: together
+    - match:
+        intent:
+          - voice
+          - tts
+          - audio
+      profile: elevenlabs
+    - match:
+        intent:
+          - image
+          - video
+          - generation
+      profile: fal
+    - match:
+        intent:
+          - multilingual
+          - chinese
+          - spanish
+      profile: featherless
+    - match:
+        intent:
+          - budget
+          - cheap
+          - cost
+      profile: featherless
+    - match:
+        intent:
+          - heavy_reasoning
+          - math
+          - complex
+      profile: sambanova
+    - match:
+        intent:
+          - cost_optimized
+          - batch
+          - high_volume
+      profile: siliconflow
+    - match:
+        intent:
+          - free
+          - no-cost
+          - open-source
+      profile: gpt-oss-120b
+    - match:
+        intent:
+          - code-review
+          - pr
+      profile: gpt-5.4-mini
+    - match:
+        intent:
+          - quick-chat
+          - casual
+      profile: mimo-v2-pro
+proxy:
+  auth_token: REPLACE_ME
+  enabled: true
+  host: 127.0.0.1
+  port: 8645
+  providers:
+    - custom:featherless
+session_reset:
+  at_hour: 4
+  idle_minutes: 1440
+  mode: both
+video_gen:
+  model: pixverse-v6
+  provider: fal
+  use_gateway: true
+webhooks:
+  enabled: true
+worktrees:
+  base_dir: /tmp/hermes-worktrees
+  enabled: true
+mcp_servers:
+  composio:
+    url: https://connect.composio.dev/mcp
+    headers:
+      x-consumer-api-key: ${MCP_COMPOSIO_API_KEY}
+    enabled: true
+  pipeboard_google_ads:
+    url: https://google-ads.mcp.pipeboard.co/
+    enabled: false
+  pipeboard_meta_ads:
+    url: https://meta-ads.mcp.pipeboard.co/
+    enabled: false
+TELEGRAM_HOME_CHANNEL: 5664287858

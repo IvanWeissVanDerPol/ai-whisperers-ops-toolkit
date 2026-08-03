@@ -1,0 +1,15 @@
+# Python deps for AI-Whisperers Ops Toolkit
+# Tested on Python 3.10+
+
+# HTTP / web
+requests>=2.31
+urllib3>=2.0
+
+# YAML
+PyYAML>=6.0
+
+# System
+psutil>=5.9
+
+# Stats
+# (uses stdlib statistics in most scripts)
