@@ -117,10 +117,10 @@ python3 shared_memory.py status
 6. **LLM planner**: when heuristic doesn't fit, ask the LLM to decompose (with same fallback)
 7. **Retry policy**: failures don't cascade — retry, escalate, or skip cleanly
 8. **Cost tracking**: every worker records tokens + cost so you can budget the swarm
+9. **Persistent state**: plan + subtask history saved to disk; resume interrupted runs
+10. **Cost optimizer**: downgrades model per task to the cheapest that meets quality floor
 
-## Resilience flow
-
-When a subtask fails:
+## Resilience + recovery flow
 
 ```
 failure detected
@@ -133,9 +133,18 @@ RetryPolicy.decide(attempt, reason)
         ├─ attempt < escalate_after   → ESCALATE (add reviewer subtask + retry after)
         │
         └─ else                       → FAIL (skip dependents)
+                │
+                ▼
+        state persisted to disk via PersistentState
+                │
+                ▼
+        New Orchestrator.continue_if_interrupted() + resume()
+                │
+                ▼
+        Picks up where we left off (succeeded tasks reused, pending re-run)
 ```
 
-Verified by `examples/dry_run_with_retry.py`: a coder task fails once, the orchestrator retries it with the same role, and the dependent tester runs after the retry succeeds. Final plan: 3/3 succeeded, retry logged in shared memory.
+Verified by `examples/dry_run_with_retry.py` (retry) and `examples/resume_interrupted.py` (interrupt + resume, 2 tasks reused from state, 3 re-executed, 5/5 succeed).
 
 ## Limits / not-yet-implemented
 
@@ -155,10 +164,14 @@ Verified by `examples/dry_run_with_retry.py`: a coder task fails once, the orche
 | `swarm.py` | ~7 KB | CLI entry point + run management |
 | `planner.py` | ~10 KB | LLM-based task decomposition (with heuristic fallback) |
 | `retry.py` | ~7 KB | Retry + escalation policy (resilient failure handling) |
-| `cost_tracker.py` | ~8 KB | Token + cost tracking per worker |
+| `cost_tracker.py` | ~8 KB | Per-worker token + cost tracking |
+| `persistent_state.py` | ~8 KB | Save/load plan to disk + resume detection |
+| `cost_optimizer.py` | ~10 KB | Pick cheapest viable model per task based on quality floor |
 | `README.md` | this | Architecture + usage docs |
 | `examples/dry_run.py` | 5 KB | End-to-end test (no auth needed) |
 | `examples/dry_run_with_retry.py` | 7 KB | End-to-end retry + cost tracking test |
+| `examples/resume_interrupted.py` | 9 KB | End-to-end interrupt + resume test |
+| `examples/cost_optimization.py` | 6 KB | Cost optimizer comparison demo |
 | `examples/research_workflow.py` | 3 KB | Real-world example (3 parallel → synthesis → review) |
 
 ## Roadmap
@@ -166,9 +179,10 @@ Verified by `examples/dry_run_with_retry.py`: a coder task fails once, the orche
 - [x] LLM-based planner (`planner.py` ships with heuristic fallback)
 - [x] Retry policy with escalation (`retry.py` ships)
 - [x] Cost tracking (`cost_tracker.py` ships)
-- [ ] Persistent swarm state across runs (resume interrupted work)
+- [x] Persistent state + resume (`persistent_state.py` ships, verified)
+- [x] Cost optimizer (`cost_optimizer.py` ships, verified)
 - [ ] Real-time WebSocket progress UI
-- [ ] Multi-provider cost optimization (auto-pick cheapest model per task)
+- [ ] Multi-host swarm coordination (workers on different machines)
 
 ## See also
 

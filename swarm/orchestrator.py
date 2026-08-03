@@ -102,6 +102,7 @@ class Orchestrator:
         max_parallel: int = 3,
         worker_script: Optional[Path] = None,
         retry_policy: Optional["RetryPolicy"] = None,
+        save_interval: int = 1,
     ):
         self.memory = SharedMemory(memory_dir)
         self.memory_dir = Path(memory_dir)
@@ -112,6 +113,11 @@ class Orchestrator:
             from retry import RetryPolicy
             retry_policy = RetryPolicy.default()
         self.retry_policy = retry_policy
+        self.save_interval = save_interval
+        self._tasks_since_save = 0
+        # Lazy import to avoid circular dependency
+        from persistent_state import PersistentState
+        self.persistent_state = PersistentState(memory_dir)
 
     # ---- Decomposition ----
 
@@ -341,11 +347,21 @@ class Orchestrator:
         }
 
     def _save_plan(self, plan: Plan) -> None:
+        # Always write blackboard (cheap, immediate availability)
         self.memory.write_blackboard("current_plan", {
             "goal": plan.goal,
             "subtasks": [self._serialize(s) for s in plan.subtasks],
             "metadata": plan.metadata,
         })
+        # Persist to disk every N tasks (survives crashes/interruptions)
+        self._tasks_since_save += 1
+        if self._tasks_since_save >= self.save_interval:
+            try:
+                self.persistent_state.save(plan)
+                self._tasks_since_save = 0
+            except Exception as e:
+                self.memory.log(self.orchestrator_id, "orchestrator",
+                                "persist_save_failed", {"error": str(e)[:200]})
 
     def _handle_failure(self, plan: Plan, subtask: SubTask, failure_reason: str) -> None:
         """Apply retry policy to a failed subtask."""
@@ -388,6 +404,46 @@ class Orchestrator:
                     self.orchestrator_id, "orchestrator",
                     "dependent_skipped", {"id": dep.id, "due_to": subtask.id},
                 )
+
+    def continue_if_interrupted(self) -> Optional["Plan"]:
+        """If persistent state exists and looks interrupted, load + return it.
+
+        Returns None if no state exists or the previous run completed cleanly.
+        """
+        from orchestrator import Plan
+        if not self.persistent_state.exists():
+            return None
+        if not self.persistent_state.is_interrupted():
+            return None
+        plan = self.persistent_state.load()
+        # Reset any RUNNING subtasks to PENDING (they were interrupted)
+        for s in plan.subtasks:
+            if s.status == TaskStatus.RUNNING:
+                self.memory.log(self.orchestrator_id, "orchestrator",
+                                "interrupted_subtask_reset",
+                                {"id": s.id, "was": "running"})
+                s.status = TaskStatus.PENDING
+                s.worker_id = None
+                s.started_at = None
+                s.finished_at = None
+        self.memory.log(self.orchestrator_id, "orchestrator",
+                        "resumed_from_state", {
+                            "original_saved_at": plan.metadata.get("original_saved_at"),
+                            "n_subtasks": len(plan.subtasks),
+                            "n_already_succeeded": sum(
+                                1 for s in plan.subtasks if s.status == TaskStatus.SUCCEEDED),
+                        })
+        return plan
+
+    def resume(self, plan: "Plan") -> "Plan":
+        """Continue an interrupted plan. Resets RUNNING subtasks, then runs."""
+        self.memory.log(self.orchestrator_id, "orchestrator", "resume_started", {
+            "n_subtasks": len(plan.subtasks),
+            "n_already_succeeded": sum(1 for s in plan.subtasks if s.status == TaskStatus.SUCCEEDED),
+            "n_pending": sum(1 for s in plan.subtasks if s.status == TaskStatus.PENDING),
+            "n_failed": sum(1 for s in plan.subtasks if s.status == TaskStatus.FAILED),
+        })
+        return self.run(plan)
 
     def status(self, plan: Plan) -> dict:
         return {
