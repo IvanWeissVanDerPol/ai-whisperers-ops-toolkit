@@ -114,6 +114,28 @@ python3 shared_memory.py status
 3. **Append-only log**: every event traceable, no silent state mutations
 4. **Simple roles**: prompts in a dict, easy to add new ones
 5. **Heuristic planner**: complex enough to handle common patterns, simple enough to understand
+6. **LLM planner**: when heuristic doesn't fit, ask the LLM to decompose (with same fallback)
+7. **Retry policy**: failures don't cascade — retry, escalate, or skip cleanly
+8. **Cost tracking**: every worker records tokens + cost so you can budget the swarm
+
+## Resilience flow
+
+When a subtask fails:
+
+```
+failure detected
+        │
+        ▼
+RetryPolicy.decide(attempt, reason)
+        │
+        ├─ attempt < max_retries      → RETRY (same role, 1.5× timeout)
+        │
+        ├─ attempt < escalate_after   → ESCALATE (add reviewer subtask + retry after)
+        │
+        └─ else                       → FAIL (skip dependents)
+```
+
+Verified by `examples/dry_run_with_retry.py`: a coder task fails once, the orchestrator retries it with the same role, and the dependent tester runs after the retry succeeds. Final plan: 3/3 succeeded, retry logged in shared memory.
 
 ## Limits / not-yet-implemented
 
@@ -129,17 +151,24 @@ python3 shared_memory.py status
 |------|------|---------|
 | `shared_memory.py` | ~9 KB | Append-only log + snapshots + blackboard |
 | `worker.py` | ~10 KB | Worker subprocess template (one task per worker) |
-| `orchestrator.py` | ~15 KB | Decomposes goal + spawns workers + monitors |
+| `orchestrator.py` | ~16 KB | Decomposes goal + spawns workers + monitors + retries |
 | `swarm.py` | ~7 KB | CLI entry point + run management |
+| `planner.py` | ~10 KB | LLM-based task decomposition (with heuristic fallback) |
+| `retry.py` | ~7 KB | Retry + escalation policy (resilient failure handling) |
+| `cost_tracker.py` | ~8 KB | Token + cost tracking per worker |
 | `README.md` | this | Architecture + usage docs |
+| `examples/dry_run.py` | 5 KB | End-to-end test (no auth needed) |
+| `examples/dry_run_with_retry.py` | 7 KB | End-to-end retry + cost tracking test |
+| `examples/research_workflow.py` | 3 KB | Real-world example (3 parallel → synthesis → review) |
 
 ## Roadmap
 
-- [ ] LLM-based planner (`Orchestrator.plan()` uses claude)
-- [ ] Cost tracking per worker
-- [ ] Built-in retry policy (retry once, then escalate to reviewer)
-- [ ] Real-time WebSocket progress UI
+- [x] LLM-based planner (`planner.py` ships with heuristic fallback)
+- [x] Retry policy with escalation (`retry.py` ships)
+- [x] Cost tracking (`cost_tracker.py` ships)
 - [ ] Persistent swarm state across runs (resume interrupted work)
+- [ ] Real-time WebSocket progress UI
+- [ ] Multi-provider cost optimization (auto-pick cheapest model per task)
 
 ## See also
 
