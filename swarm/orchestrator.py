@@ -26,6 +26,7 @@ import argparse
 import json
 import os
 import subprocess
+import subprocess
 import sys
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -37,6 +38,9 @@ from typing import Optional
 
 sys.path.insert(0, str(Path(__file__).parent))
 from shared_memory import SharedMemory  # noqa: E402
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from retry import RetryPolicy  # noqa: F401
 
 
 class TaskStatus(str, Enum):
@@ -97,12 +101,17 @@ class Orchestrator:
         memory_dir: str | Path,
         max_parallel: int = 3,
         worker_script: Optional[Path] = None,
+        retry_policy: Optional["RetryPolicy"] = None,
     ):
         self.memory = SharedMemory(memory_dir)
         self.memory_dir = Path(memory_dir)
         self.max_parallel = max_parallel
         self.worker_script = worker_script or (Path(__file__).parent / "worker.py")
         self.orchestrator_id = f"orch-{int(time.time())}"
+        if retry_policy is None:
+            from retry import RetryPolicy
+            retry_policy = RetryPolicy.default()
+        self.retry_policy = retry_policy
 
     # ---- Decomposition ----
 
@@ -337,6 +346,48 @@ class Orchestrator:
             "subtasks": [self._serialize(s) for s in plan.subtasks],
             "metadata": plan.metadata,
         })
+
+    def _handle_failure(self, plan: Plan, subtask: SubTask, failure_reason: str) -> None:
+        """Apply retry policy to a failed subtask."""
+        # Inline import to avoid circular dependency
+        from retry import RetryPolicy, should_skip_dependents
+        # Ensure we have a RetryPolicy instance
+        if not hasattr(self, "retry_policy") or self.retry_policy is None:
+            self.retry_policy = RetryPolicy.default()
+        # Count existing attempts (look for retry subtasks with this prefix)
+        attempt = sum(
+            1 for s in plan.subtasks
+            if s.id == subtask.id or s.id.startswith(f"{subtask.id}-retry-")
+        )
+        decision = self.retry_policy.decide(subtask, attempt, failure_reason)
+        self.memory.log(self.orchestrator_id, "orchestrator", "retry_decision", decision.to_dict())
+
+        if decision.action.value == "retry" and decision.retry_subtask:
+            # Add retry subtask to plan
+            plan.subtasks.append(decision.retry_subtask)
+            self.memory.log(
+                self.orchestrator_id, "orchestrator",
+                "retry_added", {"id": decision.retry_subtask.id},
+            )
+        elif decision.action.value == "escalate" and decision.next_subtask:
+            # Add escalation subtask that re-tries the original after
+            plan.subtasks.append(decision.next_subtask)
+            # Also retry the original after the escalation
+            retry_subtask = self.retry_policy._make_retry(subtask, attempt + 1)
+            retry_subtask.depends_on = [decision.next_subtask.id] + list(subtask.depends_on)
+            plan.subtasks.append(retry_subtask)
+            self.memory.log(
+                self.orchestrator_id, "orchestrator",
+                "escalation_added", {"id": decision.next_subtask.id},
+            )
+        else:  # fail
+            # Skip all dependents
+            for dep in should_skip_dependents(subtask, plan):
+                dep.status = TaskStatus.SKIPPED
+                self.memory.log(
+                    self.orchestrator_id, "orchestrator",
+                    "dependent_skipped", {"id": dep.id, "due_to": subtask.id},
+                )
 
     def status(self, plan: Plan) -> dict:
         return {
