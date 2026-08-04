@@ -1,0 +1,23 @@
+[
+  {
+    "run_id": "R42-autonomous-execution",
+    "ts": "2026-08-04T20:51:50.480981+00:00",
+    "patterns": [
+      "Parallel container builds (19) consistently hit timeout/lock contention with pnpm-store. pnpm-store is a single shared file-lock.",
+      "When modifying site templates via patch, ALWAYS validate the substitution against the actual file structure (e.g. 'use client' must be first line, not after imports).",
+      "Traefik routing for non-standard paths requires the rule to be IN the leads-api service, with priority >= 100 to override paragu-ai-builder.",
+      "ES modules (import) and CommonJS (require) are NOT mixable.",
+      "docker stack deploy on existing services needs explicit --force or risks 'service already exists' error."
+    ],
+    "insights": [
+      "leads-api has become the API gateway for ~6 features. Worth health monitoring + alerting.",
+      "Sites use different file structures (some 'use client', some server components). Wiring client components is fragile because the directive must be FIRST LINE.",
+      "2 leads already captured shows the system is COLLECTING real data. The next 5 leads will be the conversion test."
+    ],
+    "next_actions": [
+      "Add Slack/Discord webhook on leads-api failures.",
+      "Standardize all 19 sites to use the same page.tsx structure.",
+      "Add a HOW-TO-RUN.md to leads-api for the user (env vars, Stripe setup, WhatsApp webhook setup)."
+    ]
+  }
+]
