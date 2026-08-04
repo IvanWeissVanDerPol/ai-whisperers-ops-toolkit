@@ -247,14 +247,16 @@ def main():
         print(f"Added {n} lessons to {log.log_path}")
         # Show summary
         for l in lessons[:3]:
-            print(f"  - {l.get("type")}: {json.dumps(l)[:100]}")
+            t = l.get("type", "")
+            print(f"  - {t}: {json.dumps(l)[:100]}")
     elif args.cmd == "stats":
         print(json.dumps(log.stats(), indent=2))
     elif args.cmd == "query":
         results = log.query(pattern=args.pattern, lesson_type=args.type, limit=args.limit)
         print(f"Found {len(results)} results:")
         for r in results[:args.limit]:
-            print(f"  [{r.get("type")}] {json.dumps(r)[:200]}")
+            t = r.get("type", "?")
+            print(f"  [{t}] {json.dumps(r)[:200]}")
 
 
 if __name__ == "__main__":

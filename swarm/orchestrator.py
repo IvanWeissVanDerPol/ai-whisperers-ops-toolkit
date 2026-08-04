@@ -268,6 +268,27 @@ class Orchestrator:
                 "failed": sum(1 for s in plan.subtasks if s.status == TaskStatus.FAILED),
                 "skipped": sum(1 for s in plan.subtasks if s.status == TaskStatus.SKIPPED),
             })
+            # Optional LLM-driven reflection (env-gated, no-op if no API key)
+            if os.environ.get("SWARM_LLM_REFLECTIONS", "1") != "0":
+                try:
+                    from llm_reflection import add_llm_insights_to_log, get_openai_client
+                    from reflection_loop import ReflectionLog, extract_lessons_from_run
+                    if get_openai_client() is not None:
+                        # Always log heuristic reflections first
+                        log = ReflectionLog()
+                        heuristic_lessons = extract_lessons_from_run(self.memory_dir)
+                        log.add(heuristic_lessons)
+                        # Then add LLM insights
+                        n_insights = add_llm_insights_to_log(self.memory_dir, log)
+                        if n_insights > 0:
+                            self.memory.log(self.orchestrator_id, "orchestrator",
+                                            "llm_reflection_added",
+                                            {"n_insights": n_insights,
+                                             "reflection_log": str(log.log_path)})
+                except Exception as e:
+                    self.memory.log(self.orchestrator_id, "orchestrator",
+                                    "llm_reflection_failed",
+                                    {"error": str(e)[:200]})
         return plan
 
     def _run_subtask(self, plan: Plan, subtask: SubTask) -> None:
