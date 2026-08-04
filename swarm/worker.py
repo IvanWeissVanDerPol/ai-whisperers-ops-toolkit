@@ -142,7 +142,14 @@ class Worker:
         self.extra_context = extra_context
 
     def load_context(self) -> str:
-        """Load relevant context from shared memory."""
+        """Load relevant context from shared memory.
+
+        Includes:
+        - Recent log entries (last 20)
+        - Snapshots from other workers
+        - Blackboard keys
+        - Optional RAG-retrieved context (if SWARM_RAG_DB env var is set)
+        """
         parts = []
         # Recent log entries (last 20)
         recent = self.memory.read_log()[-20:]
@@ -167,6 +174,24 @@ class Worker:
             for k in bb_keys:
                 val = self.memory.read_blackboard(k)
                 parts.append(f"- {k}: {str(val)[:200]}")
+
+        # RAG context (if enabled via env var)
+        rag_db = os.environ.get("SWARM_RAG_DB")
+        if rag_db:
+            try:
+                sys.path.insert(0, str(Path(__file__).parent.parent / "rag"))
+                from rag.rag import RAG  # type: ignore
+                rag = RAG(db_path=rag_db)
+                try:
+                    # Use the task description as the query
+                    rag_context = rag.retrieve(self.task, top_k=3, max_chars=2000)
+                    if rag_context:
+                        parts.append("\n## RAG-retrieved context from past runs:")
+                        parts.append(rag_context)
+                finally:
+                    rag.close()
+            except Exception as e:
+                parts.append(f"\n## RAG (failed: {str(e)[:100]})")
 
         return "\n".join(parts)
 

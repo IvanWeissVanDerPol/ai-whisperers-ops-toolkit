@@ -174,15 +174,20 @@ Verified by `examples/dry_run_with_retry.py` (retry) and `examples/resume_interr
 | `examples/cost_optimization.py` | 6 KB | Cost optimizer comparison demo |
 | `examples/research_workflow.py` | 3 KB | Real-world example (3 parallel → synthesis → review) |
 
-## Roadmap
+## Atlas roadmap
 
-- [x] LLM-based planner (`planner.py` ships with heuristic fallback)
-- [x] Retry policy with escalation (`retry.py` ships)
-- [x] Cost tracking (`cost_tracker.py` ships)
-- [x] Persistent state + resume (`persistent_state.py` ships, verified)
-- [x] Cost optimizer (`cost_optimizer.py` ships, verified)
-- [ ] Real-time WebSocket progress UI
-- [ ] Multi-host swarm coordination (workers on different machines)
+| Item | Status | Round |
+|------|--------|-------|
+| E-1 Agent Swarm architecture | ✓ shipped | R30 |
+| F-1 Vector DB foundation | ✓ shipped | R33 |
+| C-2 Reflection / self-improvement loop | ✓ shipped | R34 |
+| RAG integration with swarm | ✓ shipped | R34 |
+| Multi-provider cost optimization | ✓ shipped | R31 (partial) + R32 (optimizer) |
+| Persistent swarm state | ✓ shipped | R32 |
+| Real-time WebSocket progress UI | pending | — |
+| Multi-host swarm coordination | pending | — |
+
+**Stats**: 18/20 Atlas items shipped across R30-R34 (5 rounds).
 
 ## See also
 
