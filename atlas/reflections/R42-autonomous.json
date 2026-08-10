@@ -17,7 +17,7 @@
     "next_actions": [
       "Add Slack/Discord webhook on leads-api failures.",
       "Standardize all 19 sites to use the same page.tsx structure.",
-      "Add a HOW-TO-RUN.md to leads-api for the user (env vars, Stripe setup, WhatsApp webhook setup)."
+      "Add a HOW-TO-RUN.md to leads-api for the user (env vars, Stripe setup, Messaging webhook setup)."
     ]
   }
 ]

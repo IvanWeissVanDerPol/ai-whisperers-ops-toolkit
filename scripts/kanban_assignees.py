@@ -156,11 +156,11 @@ def cmd_set_phone(args):
 
 def cmd_people(args):
     """Show the people registry (humans + agents)."""
-    print("Humans (with WhatsApp when configured):")
+    print("Humans (with Messaging when configured):")
     for p, info in HUMAN_PEOPLE.items():
         phone = ", ".join(info.get("phone", [])) or "—"
         print(f"  {p:<14} {info['role']:<22} profile={info['profile']:<10} phone={phone}")
-    print("\nAgents (no WhatsApp, receive work via dispatcher):")
+    print("\nAgents (no Messaging, receive work via dispatcher):")
     for p, info in AGENT_PEOPLE.items():
         print(f"  {p:<14} {info['role']:<22} profile={info['profile']}")
     return 0

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-kanban_whatsapp_notify — send WhatsApp notifications for kanban task events.
+kanban_messaging_notify — send Messaging notifications for kanban task events.
 
 Reads task events from a board's SQLite task_events table, formats as
-WhatsApp messages, and sends via `hermes send -t whatsapp:<phone>`.
+Messaging messages, and sends via `hermes send -t messaging:<phone>`.
 
 Modes:
   --mode due-today     : notify owner of tasks due today
@@ -15,8 +15,8 @@ Quiet hours: 22:00-08:00 local (America/Asuncion) — defers non-urgent notifica
 Per-owner rate limit: max 3 messages per run.
 
 Usage:
-  kanban_whatsapp_notify.py --board ivan-tasks --mode due-today
-  kanban_whatsapp_notify.py --board kiki-tasks --mode overdue --dry-run
+  kanban_messaging_notify.py --board ivan-tasks --mode due-today
+  kanban_messaging_notify.py --board kiki-tasks --mode overdue --dry-run
 """
 import argparse
 import json
@@ -46,7 +46,7 @@ from kanban_store import KanbanStore  # noqa
 # Per-person → multi-platform routing. Each person can have multiple platforms.
 # When a task fires, the first available platform is used. If `hermes send` fails,
 # the script falls back to the next number in the list.
-# Format: phone in E.164 (no +) for `hermes send -t whatsapp:<phone>`
+# Format: phone in E.164 (no +) for `hermes send -t messaging:<phone>`
 # This is the ONLY place to set phone numbers.
 # Phones now live in HUMAN_PEOPLE inside kanban_common.py (single source of truth).
 # This script imports them automatically.
@@ -133,13 +133,13 @@ def get_recently_completed(con, minutes=60):
 
 
 def format_task_msg(task_id, title, assignee, due_at, body, source=None, header="📋"):
-    """Format a single task as a WhatsApp message."""
+    """Format a single task as a Messaging message."""
     msg = f"{header} {title}\n"
     if due_at:
         msg += f"📅 Due: {due_at}\n"
     msg += f"🆔 {task_id}\n"
     if body:
-        # Truncate body to fit WhatsApp comfortably
+        # Truncate body to fit Messaging comfortably
         snippet = body[:200].replace("\n", " ")
         if len(body) > 200:
             snippet += "…"

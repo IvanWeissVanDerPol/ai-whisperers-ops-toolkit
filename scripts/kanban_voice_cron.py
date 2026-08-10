@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-kanban_voice_cron — detect new WhatsApp voice note transcripts and create staging kanban tasks.
+kanban_voice_cron — detect new Messaging voice note transcripts and create staging kanban tasks.
 
-Watches ~/.hermes/desktop-attachments/ for files matching "WhatsApp Audio *.txt".
+Watches ~/.hermes/desktop-attachments/ for files matching "Messaging Audio *.txt".
 For each new transcript:
   1. Reads the file
   2. Sends to an LLM for action-item extraction (via Hermes `delegate_task` or direct LLM call)
@@ -63,10 +63,10 @@ def save_state(ts):
 
 
 def find_new_transcripts(since_ts):
-    """Find WhatsApp Audio *.txt files modified after since_ts."""
+    """Find Messaging Audio *.txt files modified after since_ts."""
     if not ATTACHMENTS_DIR.exists():
         return []
-    pattern = re.compile(r"WhatsApp Audio \d{4}-\d{2}-\d{2} at \d{2}\.\d{2}\.\d{2}\.txt$")
+    pattern = re.compile(r"Messaging Audio \d{4}-\d{2}-\d{2} at \d{2}\.\d{2}\.\d{2}\.txt$")
     matches = []
     for f in ATTACHMENTS_DIR.iterdir():
         if not f.is_file():
@@ -159,7 +159,7 @@ def ensure_voice_inbox_board(board_name="voice-inbox"):
     subprocess.run([
         "hermes", "kanban", "boards", "create", board_name,
         "--name", "🎤 Voice Inbox",
-        "--description", "Staging area for tasks extracted from WhatsApp voice notes. Review and move to your board.",
+        "--description", "Staging area for tasks extracted from Messaging voice notes. Review and move to your board.",
         "--icon", "🎤", "--color", "#a855f7"
     ], capture_output=True, text=True)
 

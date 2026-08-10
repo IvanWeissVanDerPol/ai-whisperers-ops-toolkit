@@ -16,7 +16,7 @@ each session.
 {
   "entities": [
     {"name": "Ai-Whisperers", "entityType": "Organization", "observations": ["Paraguay AI web agency", "40+ repos across 4 tiers", "28+ Docker services on Hostinger VPS", "Next.js + Docker Swarm + Traefik + Cloudflare", "Founded by Ivan"]},
-    {"name": "Erebus", "entityType": "AI Agent", "observations": ["AI workforce lead at Ai-Whisperers", "Main interaction: WhatsApp (human team) + Hermes TUI", "Senior engineer persona: calm, direct, proactive", "Ships work then reports — root cause chains", "Sub-personas: Dev, Ops, Research, Client"]},
+    {"name": "Erebus", "entityType": "AI Agent", "observations": ["AI workforce lead at Ai-Whisperers", "Main interaction: Messaging (human team) + Hermes TUI", "Senior engineer persona: calm, direct, proactive", "Ships work then reports — root cause chains", "Sub-personas: Dev, Ops, Research, Client"]},
     {"name": "ArchMagus", "entityType": "AgentPersona", "observations": ["Telegram bot username", "@ArchMagusBot"]},
     {"name": "Ivan", "entityType": "Person", "observations": ["Founder and lead developer", "Also known as ParaguAI", "Technical architect for all systems", "Prefers comprehensive execution over picking options", "Wants root cause chains, not status reports"]}
   ]
@@ -65,7 +65,7 @@ Then create relations:
   "entities": [
     {"name": "VPS-agentzero", "entityType": "Infrastructure", "observations": ["Hostinger VPS", "IP: 72.61.44.159", "31GB RAM, 387GB disk, 8 vCPUs", "Ubuntu 24.04.4 LTS", "Tailscale: 100.91.243.120"]},
     {"name": "traefik", "entityType": "Service", "observations": ["Reverse proxy", "SSL/TLS via Let's Encrypt", "Routes all 28+ sites", "Version: v3.5.3", "Ports: 80/443"]},
-    {"name": "evolution_api", "entityType": "Service", "observations": ["WhatsApp message bridge", "Domain: evolution.sunstein.cloud", "Port: 8080"]},
+    {"name": "evolution_api", "entityType": "Service", "observations": ["Messaging message bridge", "Domain: evolution.sunstein.cloud", "Port: 8080"]},
     {"name": "grafana", "entityType": "Service", "observations": ["Monitoring dashboard", "Domain: monitor.paragu-ai.com", "Port: 3030"]},
     {"name": "postgres", "entityType": "Service", "observations": ["Primary database", "Port: 5432"]}
   ]

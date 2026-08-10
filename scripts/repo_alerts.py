@@ -7,7 +7,7 @@ routes alerts to the configured channel.
 
 Each project can have a `notifications` block:
   notifications:
-    on_regression: whatsapp
+    on_regression: messaging
     on_health_drop: telegram
     on_anomaly: slack
     threshold:
@@ -46,7 +46,7 @@ def load_projects() -> list[dict]:
 def get_notifications(project: dict) -> dict:
     """Get notification config, with defaults."""
     return project.get("notifications", {
-        "on_regression": "whatsapp",
+        "on_regression": "messaging",
         "on_health_drop": None,  # off by default
         "on_anomaly": None,
         "threshold": {"health_drop": 15, "coverage_drop": 0.1},

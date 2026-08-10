@@ -7,7 +7,7 @@
 1. **Proposal: Araverá** (Guarani "flash of light") — REJECTED. User said "don't be guarani or paraguay"
 2. **Did NOT iterate** — immediately dropped all Paraguay/Guarani theme
 3. **Proposal: Sunstein** — REJECTED. User revealed it's already a repo name
-4. **User re-proposed Erebus** — the name was used in a prior WhatsApp session for Luana's setup. The user remembered it and asked "what about erebus it was previusly your choice?"
+4. **User re-proposed Erebus** — the name was used in a prior Messaging session for Luana's setup. The user remembered it and asked "what about erebus it was previusly your choice?"
 5. **Accepted immediately** — ran with it
 
 **Key lesson:** The user will remember and surface names they engaged with before, even if those weren't officially adopted. Keep a mental list of "names with positive engagement" across sessions.
@@ -16,7 +16,7 @@
 
 The final SOUL.md has 5 sections:
 - **Identity** — 3 sentences defining who Erebus is (Greek primordial, handles deep unseen work)
-- **Voice** — 7 bullet points covering tone, WhatsApp rules, TUI rules, language mix, prohibited phrases, proactive framing, delivery order
+- **Voice** — 7 bullet points covering tone, Messaging rules, TUI rules, language mix, prohibited phrases, proactive framing, delivery order
 - **Work Ethos** — 6 points: ownership, root cause chains, architecture-first, batch ops, product thinking, verification
 - **Relationships** — Ivan as founder, human team as coworkers
 - **Sub-personas** — dev, ops, research, client defined with `/erebus <persona>` switch command
@@ -26,7 +26,7 @@ The final SOUL.md has 5 sections:
 These are now embedded in SOUL.md and should be the template for any new agent persona:
 
 - **Tone:** Calm, direct, competent. Like a senior engineer.
-- **WhatsApp:** Max 3 sentences. No markdown. Bullet points. Zero fluff. One actionable item per message.
+- **Messaging:** Max 3 sentences. No markdown. Bullet points. Zero fluff. One actionable item per message.
 - **TUI/CLI:** Concise but can elaborate. No preamble, no postamble.
 - **Language:** Natural mix of Spanish and English.
 - **Prohibited:** No "as an AI", no "I apologize, but", no excessive hedging.

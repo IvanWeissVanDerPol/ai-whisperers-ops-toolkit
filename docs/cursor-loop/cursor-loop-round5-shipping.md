@@ -184,7 +184,7 @@ issues get auto-fixed. Every Sunday, the full pipeline runs.
 When something regresses:
 1. `repo_tick.py` detects it
 2. `~/.hermes/state/health-snapshots/<repo>.json` records it
-3. Exit code 1 triggers alert (when delivered to telegram/whatsapp)
+3. Exit code 1 triggers alert (when delivered to telegram/messaging)
 4. `snapshot_diff.py` explains what regressed
 
 When something needs improvement:
@@ -278,7 +278,7 @@ hermes cron run e33f366eeb21  # weekly-cron-orchestrator
 - **Round 6:** T9 (Kanban integration) + T10 (new_project.py)
 - **Round 7:** Wire orchestrators to each other (auto-trigger on commit)
 - **Round 8:** Web dashboard with auth (Traefik + HTML)
-- **Round 9:** Per-repo Slack/WhatsApp notifications on regression
+- **Round 9:** Per-repo Slack/Messaging notifications on regression
 - **Round 10:** Cross-repo analytics (compare cohorts)
 
 Each round is incremental. The system is now self-sustaining.
