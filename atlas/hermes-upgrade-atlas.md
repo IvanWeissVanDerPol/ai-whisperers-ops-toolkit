@@ -915,7 +915,7 @@ We have a basic dashboard. Need full web UI.
 849. **[M-27] Twilio Integration** — SMS/voice.
 850. **[M-28] Vonage Integration** — Same.
 851. **[M-29] MessageBird Integration** — Same.
-852. **[M-30] WhatsApp Business** — Strengthen.
+852. **[M-30] Messaging Business** — Strengthen.
 853. **[M-31] Telegram Bot API** — Already have.
 854. **[M-32] Signal Integration** — Secure messaging.
 855. **[M-33] Matrix Integration** — Open protocol.

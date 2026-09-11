@@ -176,7 +176,7 @@ Most crowded times:
   0 8 * * 1:        3 crons  (seo-client-ranking-audit, weekly-mcp-version-check,
                                  weekly-auto-remediate)
   0 3 * * *:        3 crons  (daily-config-backup, kanban-log-rotate, dentist-a11y-scan)
-  every 5m:         2 crons  (WhatsApp Bridge Health, somosgay-healthcheck)
+  every 5m:         2 crons  (Messaging Bridge Health, somosgay-healthcheck)
   */10 * * * *:     2 crons  (nous-oauth-refresh, status-page-regen)
 ```
 
@@ -412,9 +412,9 @@ Deploy (6):
 Communication (8):
   telegram-bot-poll            0 * * * *         script   telegram_bot_wrapper.sh
   telegram-bot-send            5 * * * *         script   telegram_send.py
-  WhatsApp Bridge Health        every 5m          script   whatsapp_bridge_health.py
+  Messaging Bridge Health        every 5m          script   messaging_bridge_health.py
   status-page-regen            */10 * * * *      script   status_page_regen.py
-  kanban-whatsapp-pipeline     */15 * * * *      script   kanban_whatsapp_pipeline.py
+  kanban-messaging-pipeline     */15 * * * *      script   kanban_messaging_pipeline.py
   kanban-bot-runner            */15 * * * *      script   kanban_bot_runner.py
   social-queue-runner          */30 * * * *      script   social_queue_runner.py
   timebox-self-timed           */30 * * * *      script   timebox.py
@@ -423,7 +423,7 @@ Kanban (5):
   kanban-orchestrator-30m      */30 * * * *      script   kanban_orchestrator.py
   kanban-log-rotate            0 3 * * *         script   kanban_log_rotate.py
   kanban-doctor-weekly         0 9 * * 1         script   kanban_doctor.py        [BROKEN]
-  kanban-whatsapp-pipeline     */15 * * * *      (dup above)
+  kanban-messaging-pipeline     */15 * * * *      (dup above)
 
 Skill mgmt (3):
   skill-quality-audit          0 7 * * 1         script   skill_quality_audit.py  [BROKEN: exit 2 on findings]

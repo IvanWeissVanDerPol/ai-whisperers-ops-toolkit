@@ -14,7 +14,7 @@ Checks:
   7. Phone numbers in HUMAN_PEOPLE for anyone marked as "needs_phone"
   8. Cron log files not too large
   9. Backup exists for today
-  10. WhatsApp bridge reachable
+  10. Messaging bridge reachable
 
 Usage:
   python3 /root/.hermes/scripts/kanban_doctor.py [options]
@@ -39,7 +39,7 @@ from kanban_common import (
 )
 
 BACKUP_DIR = KANBAN_HOME / "backups" / "daily"
-WHATSAPP_BRIDGE_URL = "http://127.0.0.1:3000/health"
+MESSAGING_BRIDGE_URL = "http://127.0.0.1:3000/health"
 
 # Tunables
 MAX_LOG_SIZE_BYTES = 10 * 1024 * 1024  # 10 MB
@@ -84,7 +84,7 @@ class Doctor:
         self.check_phone_numbers_configured()
         self.check_cron_log_sizes()
         self.check_backup_exists()
-        self.check_whatsapp_bridge()
+        self.check_messaging_bridge()
 
         return self.summary(json_output=silent)
 
@@ -249,17 +249,17 @@ class Doctor:
         else:
             self.add("ok", "[backups]", f"backup found: {today_backups[0].name}")
 
-    def check_whatsapp_bridge(self):
+    def check_messaging_bridge(self):
         import urllib.request
         import urllib.error
         try:
-            with urllib.request.urlopen(WHATSAPP_BRIDGE_URL, timeout=3) as resp:
+            with urllib.request.urlopen(MESSAGING_BRIDGE_URL, timeout=3) as resp:
                 if resp.status == 200:
-                    self.add("ok", "[whatsapp]", "bridge reachable")
+                    self.add("ok", "[messaging]", "bridge reachable")
                 else:
-                    self.add("warn", "[whatsapp]", f"bridge returned {resp.status}")
+                    self.add("warn", "[messaging]", f"bridge returned {resp.status}")
         except (urllib.error.URLError, TimeoutError) as e:
-            self.add("warn", "[whatsapp]", f"bridge unreachable: {e}")
+            self.add("warn", "[messaging]", f"bridge unreachable: {e}")
 
     # ---- Summary ----
 

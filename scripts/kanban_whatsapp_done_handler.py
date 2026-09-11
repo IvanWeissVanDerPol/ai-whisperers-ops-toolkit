@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-kanban_whatsapp_done_handler — poll WhatsApp bridge for DONE replies and mark tasks complete.
+kanban_messaging_done_handler — poll Messaging bridge for DONE replies and mark tasks complete.
 
 Polls http://127.0.0.1:3000/messages, parses patterns like:
   DONE <task_id>     → mark task as done
@@ -12,8 +12,8 @@ Quiet hours: 22:00-08:00 (defers to log file, doesn't process).
 Per-run limit: 50 messages processed.
 
 Usage:
-  kanban_whatsapp_done_handler.py --board ivan-tasks
-  kanban_whatsapp_done_handler.py --board kiki-tasks --dry-run
+  kanban_messaging_done_handler.py --board ivan-tasks
+  kanban_messaging_done_handler.py --board kiki-tasks --dry-run
 """
 import argparse
 import json
@@ -47,15 +47,15 @@ def sender_to_person(sender: str) -> str | None:
     """Look up the person slug from a sender's phone number (E.164).
     
     Handles various formats:
-      - "whatsapp:+5959XX"     (bridge /messages format)
+      - "messaging:+5959XX"     (bridge /messages format)
       - "+5959XX"               (raw E.164 with +)
       - "5959XX"                (E.164 without +)
       - "5959XX@c.us"           (JID with @c.us suffix)
-      - "+5959XX@c.us"          (full WhatsApp JID)
+      - "+5959XX@c.us"          (full Messaging JID)
     """
     s = sender.strip()
     # Strip known prefixes
-    for prefix in ("whatsapp:", "telegram:", "discord:"):
+    for prefix in ("messaging:", "telegram:", "discord:"):
         if s.startswith(prefix):
             s = s[len(prefix):]
     # Strip JID suffix
@@ -120,7 +120,7 @@ def is_authorized_for_task(sender: str, task_id: str, db_path) -> tuple[bool, st
 
 
 BRIDGE_URL = "http://127.0.0.1:3000"
-QUIET_HOURS_LOG = Path.home() / ".hermes" / "inbox" / "kanban-whatsapp-quiet-hours.log"
+QUIET_HOURS_LOG = Path.home() / ".hermes" / "inbox" / "kanban-messaging-quiet-hours.log"
 
 
 # board_db_path imported from kanban_common
@@ -131,7 +131,7 @@ def log_to_quiet_hours(payload):
 
 
 def fetch_messages(timeout=30):
-    """Long-poll the WhatsApp bridge for incoming messages."""
+    """Long-poll the Messaging bridge for incoming messages."""
     try:
         r = subprocess.run(
             ["curl", "-s", "-m", str(timeout), f"{BRIDGE_URL}/messages"],
@@ -162,7 +162,7 @@ def mark_done(con, task_id, board, dry_run=False):
         UPDATE tasks SET
             status='done',
             completed_at=?,
-            result='Marked done via WhatsApp reply by owner',
+            result='Marked done via Messaging reply by owner',
             claim_lock=NULL,
             worker_pid=NULL
         WHERE id=?
@@ -170,7 +170,7 @@ def mark_done(con, task_id, board, dry_run=False):
     # Emit event for audit log
     con.execute("""
         INSERT INTO task_events (task_id, kind, payload, created_at)
-        VALUES (?, 'whatsapp_done', ?, ?)
+        VALUES (?, 'messaging_done', ?, ?)
     """, (task_id, json.dumps({"board": board, "title": title}), now))
     con.commit()
     return True, f"marked done"
@@ -187,10 +187,10 @@ def mark_blocked(con, task_id, reason, board, dry_run=False):
         UPDATE tasks SET status='blocked', block_kind='needs_input',
             last_failure_error=?
         WHERE id=?
-    """, (f"Blocked via WhatsApp: {reason}", task_id))
+    """, (f"Blocked via Messaging: {reason}", task_id))
     con.execute("""
         INSERT INTO task_events (task_id, kind, payload, created_at)
-        VALUES (?, 'whatsapp_blocked', ?, ?)
+        VALUES (?, 'messaging_blocked', ?, ?)
     """, (task_id, json.dumps({"board": board, "reason": reason}), now))
     con.commit()
     return True, "marked blocked"
@@ -209,12 +209,12 @@ def send_reply(chat_id, message, dry_run=False):
     if dry_run:
         print(f"  [DRY] would reply to {chat_id}: {message[:100]}")
         return
-    cmd = ["hermes", "send", "-t", f"whatsapp:{chat_id}", "-q", message]
+    cmd = ["hermes", "send", "-t", f"messaging:{chat_id}", "-q", message]
     subprocess.run(cmd, capture_output=True, text=True)
 
 
 def handle_message(msg, board, db_path, dry_run=False):
-    """Process one WhatsApp message. Returns (handled, reply_text)."""
+    """Process one Messaging message. Returns (handled, reply_text)."""
     body = msg.get("body") or msg.get("message") or ""
     sender = msg.get("from") or msg.get("chatId") or "unknown"
     if not body:

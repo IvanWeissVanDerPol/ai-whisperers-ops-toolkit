@@ -1,6 +1,6 @@
 #!/bin/bash
 # Erebus Site Health Monitor
-# Checks all active client sites — silent when all up, WhatsApp alert on failures
+# Checks all active client sites — silent when all up, Messaging alert on failures
 # Run: every 15m via cron job erebus-site-health
 
 SITES=(

@@ -81,17 +81,17 @@ try:
 except Exception as e:
     alerts.append(f"Workspace files API check failed: {e}")
 
-# WhatsApp bridge: report only if cron jobs still target WhatsApp and gateway logs show reconnect failures
+# Messaging bridge: report only if cron jobs still target Messaging and gateway logs show reconnect failures
 cron_jobs = "/root/.hermes/cron/jobs.json"
 if os.path.exists(cron_jobs):
     try:
         data = json.load(open(cron_jobs))
         jobs = data.get("jobs", []) if isinstance(data, dict) else data
-        wa_jobs = [j for j in jobs if "whatsapp" in str(j.get("deliver", ""))]
+        wa_jobs = [j for j in jobs if "messaging" in str(j.get("deliver", ""))]
         if wa_jobs:
-            log = run("tail -80 /root/.hermes/logs/gateway.log 2>/dev/null | grep -i 'Reconnect whatsapp error\|whatsapp error' | tail -3", 10)
+            log = run("tail -80 /root/.hermes/logs/gateway.log 2>/dev/null | grep -i 'Reconnect messaging error\|messaging error' | tail -3", 10)
             if log:
-                alerts.append(f"WhatsApp delivery risk: {len(wa_jobs)} cron jobs target WhatsApp; recent reconnect errors present")
+                alerts.append(f"Messaging delivery risk: {len(wa_jobs)} cron jobs target Messaging; recent reconnect errors present")
     except Exception as e:
         alerts.append(f"Could not inspect cron delivery: {e}")
 
