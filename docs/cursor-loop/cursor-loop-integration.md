@@ -11,10 +11,10 @@ and scripts all live under `~/.hermes/`.
 
 ## Why this exists
 
-The `cursor_20260628.zip` artifact was [Engagement A — Anonymized]'s `.cursor/` directory
+The `cursor_20260628.zip` artifact was [Engagement A]'s `.cursor/` directory
 snapshot — 51 prompt-improvement iterations complete, 0 unenhanced,
 435K of staged rewrites. We extracted the patterns that generalized
-beyond [Engagement A — Anonymized] (no VB.NET / Jira / [Engagement A — Anonymized]-ticket-prefix bindings) and
+beyond [Engagement A] (no VB.NET / Jira / [engagement-ticket-prefix] bindings) and
 made them a permanent part of the Hermes shared skill library.
 
 **Last re-analysis:** 2026-07-29 (round 3) — see
@@ -67,11 +67,11 @@ per-repo findings registry.
 | `quality-findings-log` | Per-repo persistent findings registry | `tickets/quality-findings.md` pattern |
 | `disaster-recovery` | Stop-and-revert rule for bulk-edit disasters | `jp-doc-standard.md` "If corruption already happened" |
 
-### Already-skipped ([Engagement A — Anonymized]-specific)
+### Already-skipped ([engagement]-specific)
 
 - 4 jp commands for Jira / Atlassian MCP → we use Kanban
 - 4 jp commands for VB.NET/C++ migration → we're greenfield TS/Python
-- 2 jp commands for [Engagement A — Anonymized] ticket prefixes (`EBASE-NNNNN`) → we use `HERMES-<client>-<seq>`
+- 2 jp commands for [Engagement A] ticket prefixes (`EBASE-NNNNN`) → we use `HERMES-<client>-<seq>`
 
 ---
 
@@ -162,7 +162,7 @@ INDEX.md                                          # operator guide
 agile/
   user-story-exemplar.md                          # Given/When/Then (Tier 1)
   user-story-bad-exemplar.md                      # contrastive negative (Tier 1)
-  epic-exemplar-hermes.md                         # [Engagement A — Anonymized] → Hermes mapping (Tier 2)
+  epic-exemplar-hermes.md                         # [Engagement A] → Hermes mapping (Tier 2)
 changelog/
   generate-changelog-from-git-exemplar.md         # Conventional Commits (Tier 2)
   agent-application-rule-exemplar.md              # auto-apply vs surface (Tier 1)
