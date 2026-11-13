@@ -124,7 +124,7 @@ SKILL_INDEX: dict[str, dict] = {
     "ops-fallback-patterns":      {"bots": ["operations-conductor"], "priority": 2},
 
     # Sales / closer / explorer / copy
-    "paraguay-whatsapp-ghostwriting": {"bots": ["closer-bot"], "priority": 1},
+    "paraguay-messaging-ghostwriting": {"bots": ["closer-bot"], "priority": 1},
     "pyme-paraguay-objections":   {"bots": ["closer-bot"], "priority": 1},
     "ai-whisperers-pricing-benchmark": {"bots": ["explorer-bot", "closer-bot"], "priority": 1},
     "ai-whisperers-international-expansion": {"bots": ["explorer-bot"], "priority": 2},
@@ -163,7 +163,7 @@ SKILL_INDEX: dict[str, dict] = {
     "client-discovery-processor": {"bots": ["client-success-bot", "closer-bot"], "priority": 2},
 
     # Cross-bot / shared
-    "whatsapp-ecommerce-integration": {"bots": ["client-success-bot", "closer-bot", "ops-bot"], "priority": 3},
+    "messaging-ecommerce-integration": {"bots": ["client-success-bot", "closer-bot", "ops-bot"], "priority": 3},
     "voice-note-transcript-coverage": {"bots": ["delivery-bot"], "priority": 3},
     "audio-transcript-to-kanban": {"bots": ["delivery-bot"], "priority": 3},
     "kanban-batch-create-with-dispatcher-pause": {"bots": ["delivery-bot", "ops-bot"], "priority": 4},

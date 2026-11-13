@@ -893,7 +893,7 @@ discord:
       - Checking on that now.
       - Give me a sec.
       - On it.
-whatsapp:
+messaging:
   enabled: true
   bridge_port: 3000
   chunk_delay_ms: 300
@@ -1292,7 +1292,7 @@ known_plugin_toolsets:
     - hmc_tools
     - mnemosyne
     - spotify
-  whatsapp:
+  messaging:
     - evey_autonomy
     - evey_bridge
     - evey_cache
@@ -1520,7 +1520,7 @@ platform_toolsets:
     - web
     - x_search
     - yuanbao
-  whatsapp:
+  messaging:
     - browser
     - clarify
     - code_execution

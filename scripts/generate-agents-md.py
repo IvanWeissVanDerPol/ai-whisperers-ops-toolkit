@@ -44,20 +44,20 @@ TEMPLATES = {
         ],
     },
     "closer-bot": {
-        "role": "Sales closer — WhatsApp outreach and proposal writer",
+        "role": "Sales closer — Messaging outreach and proposal writer",
         "primary_tasks": [
-            "Draft WhatsApp messages for warm leads",
+            "Draft Messaging messages for warm leads",
             "Build Paraguay-market pricing proposals",
             "Handle sales objections",
             "Convert leads to signed contracts",
         ],
         "commands": [
-            ("/client-onboard", "Full client onboarding: pricing, proposal, contract, WhatsApp intro"),
-            ("Draft a follow-up message", "Use paraguay-whatsapp-ghostwriting"),
+            ("/client-onboard", "Full client onboarding: pricing, proposal, contract, Messaging intro"),
+            ("Draft a follow-up message", "Use paraguay-messaging-ghostwriting"),
             ("Handle a price objection", "Use pyme-paraguay-objections"),
             ("Build a proposal", "Use client-pricing-proposals"),
         ],
-        "skills_priority": ["paraguay-whatsapp-ghostwriting", "client-pricing-proposals", "pyme-paraguay-objections", "client-contracts", "predictable-revenue"],
+        "skills_priority": ["paraguay-messaging-ghostwriting", "client-pricing-proposals", "pyme-paraguay-objections", "client-contracts", "predictable-revenue"],
         "escalate_when": [
             "Lead mentions legal issues",
             "Pricing under $200 (use cheaper channels)",

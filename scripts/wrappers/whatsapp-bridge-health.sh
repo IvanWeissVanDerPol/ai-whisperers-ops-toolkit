@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-# WhatsApp Bridge Health Monitor
+# Messaging Bridge Health Monitor
 # Checks bridge connectivity on port 3007.
 # Only restarts if bridge is truly down — does NOT kill the gateway-managed bridge.
 # Called by Hermes cron every 5 minutes.
 set -euo pipefail
 
 BRIDGE_URL="http://127.0.0.1:3007"
-BRIDGE_DIR="/root/.hermes/hermes-agent/scripts/whatsapp-bridge"
-LOG="/root/.hermes/whatsapp/bridge.log"
-SESSION_DIR="/root/.hermes/whatsapp/session"
+BRIDGE_DIR="/root/.hermes/hermes-agent/scripts/messaging-bridge"
+LOG="/root/.hermes/messaging/bridge.log"
+SESSION_DIR="/root/.hermes/messaging/session"
 
 # Check if bridge responds
 STATUS=$(curl -sf -o /dev/null -w "%{http_code}" "$BRIDGE_URL/health" 2>/dev/null || echo "000")
@@ -43,7 +43,7 @@ if [ "$STATUS" = "000" ]; then
         fi
     fi
 elif [ "$CONNECTED" = "false" ]; then
-    echo "BRIDGE WARNING - bridge process alive but WhatsApp disconnected. May need QR re-scan."
+    echo "BRIDGE WARNING - bridge process alive but Messaging disconnected. May need QR re-scan."
 else
     echo "BRIDGE OK - status=$STATUS, connected=$CONNECTED"
 fi

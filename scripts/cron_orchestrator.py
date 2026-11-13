@@ -9,7 +9,7 @@ This is the top-level orchestrator. It runs:
   4. Skill-usage tracking
   5. Loop-back continuity (run Hermeneutic cycle on bottom-10 skills)
   6. Dashboard render
-  7. Digest (optional: send to Telegram/WhatsApp)
+  7. Digest (optional: send to Telegram/Messaging)
 
 Usage:
     python3 ~/.hermes/scripts/cron_orchestrator.py                    # full run

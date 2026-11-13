@@ -9,7 +9,7 @@ in 2026-07-28. Every script should import from here instead of redefining:
 - KANBAN_ROOT, KANBAN_HOME — paths used everywhere
 - ensure_due_dates_table / ensure_task_assignees_table — lazy schema migration
 - quiet_hours() — check whether to send notifications
-- send_to_platforms(phones, message, dry_run) — multi-platform WhatsApp send
+- send_to_platforms(phones, message, dry_run) — multi-platform Messaging send
 - PEOPLE, HUMAN_PEOPLE, AGENT_PEOPLE — combined people registry
 - DEFAULT_TENANT — internal tenant name for tasks created by our scripts
 - safe_log(level, msg) — log that doesn't break on missing dirs
@@ -139,7 +139,7 @@ def today_iso() -> str:
 def quiet_hours() -> bool:
     """Return True if it's currently in quiet hours (22:00-08:00 local time).
 
-    Use to suppress WhatsApp notifications during off-hours.
+    Use to suppress Messaging notifications during off-hours.
     """
     now = datetime.now().time()
     return now >= time(22, 0) or now < time(8, 0)
@@ -157,7 +157,7 @@ def log_quiet_hours(payload: dict, log_path: Path | None = None) -> None:
         f.write(json.dumps({**payload, "logged_at": datetime.now().isoformat()}) + "\n")
 
 
-# ---- WhatsApp multi-platform send -----------------------------------------
+# ---- Messaging multi-platform send -----------------------------------------
 
 def send_to_platforms(
     phones: list[str] | None,
@@ -187,7 +187,7 @@ def send_to_platforms(
         return True, "dry-run"
 
     for phone in phones:
-        cmd = ["hermes", "send", "-t", f"whatsapp:{phone}", "-q", message]
+        cmd = ["hermes", "send", "-t", f"messaging:{phone}", "-q", message]
         try:
             r = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
             if r.returncode == 0:
@@ -199,7 +199,7 @@ def send_to_platforms(
 
 # ---- People registry ------------------------------------------------------
 
-# Humans get WhatsApp notifications. Agents don't (they receive work via dispatcher).
+# Humans get Messaging notifications. Agents don't (they receive work via dispatcher).
 HUMAN_PEOPLE = {
     # Phone numbers are stored WITH the leading '+' (E.164 format).
     # Update these when you know someone's number. Or override via env vars:
@@ -279,8 +279,8 @@ def run_pipeline_scripts() -> dict[str, str]:
     """
     scripts = [
         ("voice", "kanban_voice_cron.py"),
-        ("notify", "kanban_whatsapp_notify.py"),
-        ("done", "kanban_whatsapp_done_handler.py"),
+        ("notify", "kanban_messaging_notify.py"),
+        ("done", "kanban_messaging_done_handler.py"),
     ]
     results = {}
     for key, name in scripts:

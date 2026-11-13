@@ -362,7 +362,7 @@ python3 ~/.hermes/scripts/cron_orchestrator.py
 # 5. Run skill-quality-audit
 # 6. Run manage-playbook cycle if score regressed
 # 7. Render dashboard
-# 8. Send digest to Telegram/WhatsApp
+# 8. Send digest to Telegram/Messaging
 ```
 
 This is the **single command** that runs everything.
@@ -486,7 +486,7 @@ This runs:
 4. Skill-usage tracking
 5. Loop-back continuity
 6. Dashboard render
-7. Digest to Telegram/WhatsApp
+7. Digest to Telegram/Messaging
 
 If you want only **one** thing from Round 5, build this.
 

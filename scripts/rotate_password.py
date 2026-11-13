@@ -8,7 +8,7 @@ Workflow:
 3. Compute bcrypt/htpasswd entry for Traefik
 4. Update the Traefik dynamic config with the new htpasswd
 5. Trigger a Traefik reload (or wait for the next poll)
-6. Notify the operator via Telegram/WhatsApp with the new password
+6. Notify the operator via Telegram/Messaging with the new password
 7. Save history to ~/.hermes/state/password-history.json
 
 Usage:
@@ -140,7 +140,7 @@ def save_history(password: str, length: int) -> dict:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Auto-rotate dashboard password")
     parser.add_argument("--length", type=int, default=24, help="Password length")
-    parser.add_argument("--notify", choices=["telegram", "whatsapp", "slack"], help="Notify channel")
+    parser.add_argument("--notify", choices=["telegram", "messaging", "slack"], help="Notify channel")
     parser.add_argument("--no-traefik", action="store_true", help="Skip Traefik config update")
     parser.add_argument("--dry-run", action="store_true", help="Generate password but don't write")
     parser.add_argument("--json", action="store_true", help="JSON output")

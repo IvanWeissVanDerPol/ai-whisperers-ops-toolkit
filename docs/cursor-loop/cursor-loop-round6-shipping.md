@@ -14,7 +14,7 @@
 | `migrate_skills.py` | `~/.hermes/scripts/` | Auto-migrate skills to schema-compliant frontmatter |
 | `new_project.py` | `~/.hermes/scripts/` | Scaffold + register a new client site from template |
 | `kanban_orchestrator.py` | `~/.hermes/scripts/` | T9 — Kanban tasks drive orchestrators |
-| `regression_alert.py` | `~/.hermes/scripts/` | Alert via WhatsApp/Telegram/Slack on regression |
+| `regression_alert.py` | `~/.hermes/scripts/` | Alert via Messaging/Telegram/Slack on regression |
 | `dashboard_server.py` | `~/.hermes/scripts/` | HTTP server with basic auth, serves dashboard |
 | `sync_hermes_config.py` | `~/.hermes/scripts/` | Sync `~/.hermes/` into `/root/hermes-config` |
 
@@ -28,7 +28,7 @@
 
 | Cron | Schedule | Script |
 |---|---|---|
-| `regression-alert-6h` | `0 */6 * * *` | `regression_alert.py --target whatsapp --compare 1d` |
+| `regression-alert-6h` | `0 */6 * * *` | `regression_alert.py --target messaging --compare 1d` |
 | `kanban-orchestrator-30m` | `*/30 * * * *` | `kanban_orchestrator.py --all --dry-run` |
 | `sync-hermes-config-daily` | `0 6 * * *` | `sync_hermes_config.py --auto --push` |
 
@@ -106,7 +106,7 @@ Workflow:
 ### 4. `regression_alert.py` — Alert on regression
 
 ```bash
-python3 ~/.hermes/scripts/regression_alert.py --target whatsapp
+python3 ~/.hermes/scripts/regression_alert.py --target messaging
 ```
 
 Workflow:
@@ -120,7 +120,7 @@ Regressions:
   • psycology: health_score: 60 → 50
   • nexa-paraguay: coverage: 78% → 71%
 ```
-3. Sends via `hermes send -t whatsapp` (or telegram/slack)
+3. Sends via `hermes send -t messaging` (or telegram/slack)
 
 **Result:** Operator gets alerted within minutes of regression.
 
@@ -216,7 +216,7 @@ hermes-config/
 |---|---|---|
 | Every 30 min | `kanban-orchestrator-30m` | Resolve Kanban tasks via orchestrators |
 | Hourly | `hourly-skill-usage` | Track skill load counts |
-| Every 6h | `regression-alert-6h` | Alert on regression via WhatsApp |
+| Every 6h | `regression-alert-6h` | Alert on regression via Messaging |
 | Daily 06:00 | `sync-hermes-config-daily` | Commit + push hermes-config |
 | Daily 09:00 | `daily-repo-tick` | Tick all 45 repos |
 | Daily 10:00 | `daily-repo-dashboard` | Render dashboard |
@@ -257,7 +257,7 @@ hermes-config/
 
 1. **Wire dashboard_server into Traefik + Cloudflare** with HTTPS + auth (4h)
 2. **Connect cron_orchestrator to Telegram bot** for interactive `/health` command (3h)
-3. **Per-repo Slack/WhatsApp notifications** on regression, configurable via `projects.yaml` (2h)
+3. **Per-repo Slack/Messaging notifications** on regression, configurable via `projects.yaml` (2h)
 4. **AI-powered anomaly detection** on health-snapshots (use an LLM to detect anomalies the rule-based diff misses) (4h)
 5. **Public status page** (Cloudflare Pages + JSON API) (3h)
 

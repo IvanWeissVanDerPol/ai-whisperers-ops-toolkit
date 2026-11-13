@@ -40,7 +40,7 @@ Use `mcp call memory-server create_entities` for these entity types:
   "name": "Erebus",
   "observations": [
     "AI workforce lead at Ai-Whisperers",
-    "Main interaction: WhatsApp (human team) + Hermes TUI",
+    "Main interaction: Messaging (human team) + Hermes TUI",
     "Senior engineer persona: calm, direct, proactive",
     "Ships work then reports — root cause chains"
   ]
@@ -92,9 +92,9 @@ Use `mcp call memory-server create_entities` for these entity types:
   "entityType": "Service",
   "name": "Evolution API",
   "observations": [
-    "WhatsApp Business message bridge",
+    "Messaging Business message bridge",
     "Hosted at evolution.sunstein.cloud on port 8080",
-    "Connected to Hermes Gateway for WhatsApp AI"
+    "Connected to Hermes Gateway for Messaging AI"
   ]
 }
 ```
@@ -103,7 +103,7 @@ Use `mcp call memory-server create_entities` for these entity types:
 ```json
 {
   "entityType": "Convention",
-  "name": "WhatsApp communication rules",
+  "name": "Messaging communication rules",
   "observations": [
     "Max 3 sentences per response",
     "No greetings, closings, or filler",

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Generate draft social media posts for Ometz from the latest content JSONs.
-# Picks 1 random service + 1 testimonial, drafts a FB post + IG caption + WhatsApp message.
+# Picks 1 random service + 1 testimonial, drafts a FB post + IG caption + Messaging message.
 # Useful for human review before posting — never auto-posts.
 #
 # Usage: social-draft.sh [locale]
@@ -24,7 +24,7 @@ TESTIMONIAL=$(python3 -c "
 import json, os, random
 files = [f for f in os.listdir('$APP/content/$LOCALE') if 'testimonial' in f or 'review' in f]
 if not files:
-    print('Testimonio pendiente — escribinos por WhatsApp y te contamos casos reales.')
+    print('Testimonio pendiente — escribinos por Messaging y te contamos casos reales.')
 else:
     d = json.load(open(os.path.join('$APP/content/$LOCALE', random.choice(files))))
     items = d.get('testimonials', d.get('reviews', []))
@@ -34,7 +34,7 @@ else:
         name = t.get('name', 'Paciente')
         print(f'\"{quote}\" — {name}')
     else:
-        print('Testimonio pendiente — escribinos por WhatsApp y te contamos casos reales.')
+        print('Testimonio pendiente — escribinos por Messaging y te contamos casos reales.')
 ")
 
 echo "============================================================"
@@ -58,7 +58,7 @@ En Ometz Dental entendemos. Por eso:
 Hoy hablamos sobre: $SERVICE
 
 📍 Auditores de la Guerra del Chaco 617, Barrio Mburucuyá, Asunción
-📲 +595 981 146 759 (WhatsApp)
+📲 +595 981 146 759 (Messaging)
 🌐 ometzdental.com
 
 #OmetzDental #Asunción #SaludBucal #DentistaAsunción
@@ -70,13 +70,13 @@ $TESTIMONIAL
 
 Cada paciente tiene su historia. En Ometz, la escuchamos primero.
 
-→ Escribinos por WhatsApp: link en bio
+→ Escribinos por Messaging: link en bio
 → Conocé $SERVICE: ometzdental.com
 
 #OmetzDental #OdontologíaHumana #Asunción
 EOF
 echo ""
-echo "--- WHATSAPP STATUS (~150 chars) ---"
+echo "--- MESSAGING STATUS (~150 chars) ---"
 cat << EOF
 🦷 Ometz Dental — Te escucho antes de tocar.
 📲 Escribinos si querés saber más sobre $SERVICE.

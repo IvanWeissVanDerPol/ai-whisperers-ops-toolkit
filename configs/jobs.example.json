@@ -337,14 +337,14 @@
     },
     {
       "id": "a237cd9ed1be",
-      "name": "WhatsApp Bridge Health Monitor",
+      "name": "Messaging Bridge Health Monitor",
       "prompt": "",
       "skills": [],
       "skill": null,
       "model": "deepseek-chat",
       "provider": "litellm",
       "base_url": "http://72.61.44.159:4000/v1",
-      "script": "whatsapp-bridge-health.sh",
+      "script": "messaging-bridge-health.sh",
       "no_agent": true,
       "context_from": null,
       "schedule": {
@@ -646,7 +646,7 @@
     {
       "id": "262a4513abf6",
       "name": "daily-todo-list",
-      "prompt": "Deliver to user as a WhatsApp message. Format as a short daily todo list. Include these persistent items plus any other open tasks I am tracking for the user:\n\n1. Gerbert-Renee contract negotiation \u2014 counter at lower than midpoint, bread-indexed. Work it in separate AI; I just remind.\n2. [Engagement A] context \u2014 5th year consolidation, [PE Sponsor], prepped for sale, SaaS AI pivot underway.\n\nKeep tone direct, WhatsApp-native (no markdown, plain lines, 3 sentences max per item). Add any other open threads I have flagged in recent memory or this session. Run on user's morning, deliver to current chat.",
+      "prompt": "Deliver to user as a Messaging message. Format as a short daily todo list. Include these persistent items plus any other open tasks I am tracking for the user:\n\n1. Gerbert-Renee contract negotiation \u2014 counter at lower than midpoint, bread-indexed. Work it in separate AI; I just remind.\n2. [Engagement A] context \u2014 5th year consolidation, [PE Sponsor], prepped for sale, SaaS AI pivot underway.\n\nKeep tone direct, Messaging-native (no markdown, plain lines, 3 sentences max per item). Add any other open threads I have flagged in recent memory or this session. Run on user's morning, deliver to current chat.",
       "skills": [],
       "skill": null,
       "model": "MiniMax-M3",
@@ -676,7 +676,7 @@
       "last_delivery_error": null,
       "deliver": "origin",
       "origin": {
-        "platform": "whatsapp",
+        "platform": "messaging",
         "chat_id": "90293147848775@lid",
         "chat_name": "John",
         "thread_id": null
@@ -695,7 +695,7 @@
     {
       "id": "cb1d9f5d61bb",
       "name": "timebox-self-timed",
-      "prompt": "Time-boxing self-timed cycles. User kicks off by sending \"start timebox\" or similar. Track start time. After 2h (configurable up to 2.5h), ping user to disengage for 30min break. After 30min, ping to re-engage and ask if starting a new block. Persist current block state in memory. User can pause/resume with \"pause\" / \"resume\" or skip block with \"skip\". WhatsApp-native, no markdown.",
+      "prompt": "Time-boxing self-timed cycles. User kicks off by sending \"start timebox\" or similar. Track start time. After 2h (configurable up to 2.5h), ping user to disengage for 30min break. After 30min, ping to re-engage and ask if starting a new block. Persist current block state in memory. User can pause/resume with \"pause\" / \"resume\" or skip block with \"skip\". Messaging-native, no markdown.",
       "skills": [],
       "skill": null,
       "model": "stepfun/step-3.7-flash:free",
@@ -726,7 +726,7 @@
       "last_delivery_error": null,
       "deliver": "origin",
       "origin": {
-        "platform": "whatsapp",
+        "platform": "messaging",
         "chat_id": "90293147848775@lid",
         "chat_name": "John",
         "thread_id": null
@@ -1707,7 +1707,7 @@
     },
     {
       "id": "605d63b45d9f",
-      "name": "kanban-whatsapp-pipeline",
+      "name": "kanban-messaging-pipeline",
       "prompt": "",
       "skills": [],
       "skill": null,
@@ -2907,7 +2907,7 @@
       "last_delivery_error": null,
       "deliver": "origin",
       "origin": {
-        "platform": "whatsapp",
+        "platform": "messaging",
         "chat_id": "120363404918156195@g.us",
         "chat_name": "120363404918156195",
         "thread_id": null,
@@ -2919,7 +2919,7 @@
     {
       "id": "82b0e4c4d14a",
       "name": "Thursday office sync (Erebus)",
-      "prompt": "You are Erebus, running a 30-min Thu office sync with Ivan and Kiki.\n\nBefore the meeting:\n1. Read /root/.hermes/AI_WHISPERERS_OPERATIONS_BRIEFING.md\n2. Run `hermes kanban boards list` and `hermes cron list` to get current state\n3. Pull from latest Tue standup output (context_from: tue-standup job if available, else read recent sessions)\n4. Check what got shipped vs deferred since Tue (git log + session_search \"since Tuesday\")\n5. Skim inbound messages since Tue (WhatsApp bridge log if available)\n\nFormat as:\n\nTHU CHECK-IN \u2014 <date>\n1. Tue follow-through (what got done, what didn\u2019t, why)\n2. Mid-week surprises (anything new since Tue worth flagging)\n3. Ship-or-defer queue (3 items max \u2014 what we close this week)\n4. Risk register update (any new, any cleared)\n5. Seeds for next Tue (3 topics to put on the agenda)\n\nKeep it tight: max 200 words. Bullet points. Spanish/English mix OK.\nDeliver to origin (current chat). Attach to session so Ivan can reply inline.",
+      "prompt": "You are Erebus, running a 30-min Thu office sync with Ivan and Kiki.\n\nBefore the meeting:\n1. Read /root/.hermes/AI_WHISPERERS_OPERATIONS_BRIEFING.md\n2. Run `hermes kanban boards list` and `hermes cron list` to get current state\n3. Pull from latest Tue standup output (context_from: tue-standup job if available, else read recent sessions)\n4. Check what got shipped vs deferred since Tue (git log + session_search \"since Tuesday\")\n5. Skim inbound messages since Tue (Messaging bridge log if available)\n\nFormat as:\n\nTHU CHECK-IN \u2014 <date>\n1. Tue follow-through (what got done, what didn\u2019t, why)\n2. Mid-week surprises (anything new since Tue worth flagging)\n3. Ship-or-defer queue (3 items max \u2014 what we close this week)\n4. Risk register update (any new, any cleared)\n5. Seeds for next Tue (3 topics to put on the agenda)\n\nKeep it tight: max 200 words. Bullet points. Spanish/English mix OK.\nDeliver to origin (current chat). Attach to session so Ivan can reply inline.",
       "skills": [
         "ai-whisperers-fleet-health",
         "ideas-skills-graph"
@@ -2955,7 +2955,7 @@
       "last_delivery_error": null,
       "deliver": "origin",
       "origin": {
-        "platform": "whatsapp",
+        "platform": "messaging",
         "chat_id": "120363404918156195@g.us",
         "chat_name": "120363404918156195",
         "thread_id": null,

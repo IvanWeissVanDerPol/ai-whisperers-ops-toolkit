@@ -70,7 +70,7 @@ BOT_SECTIONS = {
 - **NPS proxy**: monthly survey response count vs total sent""",
         "cost_awareness": """## Cost Awareness
 
-- This bot is mostly LOW COST (whatsapp + small LLM calls)
+- This bot is mostly LOW COST (messaging + small LLM calls)
 - Avoid long-context tasks (>10k tokens per session)
 - Never run inference-heavy skills (video gen, image gen) without operator approval
 - Monthly token budget: 500k tokens max""",
@@ -178,7 +178,7 @@ BOT_SECTIONS = {
     "closer-bot": {
         "failure_modes": """## Failure Modes
 
-- **WhatsApp message marked spam** → STOP, change template, wait 24h
+- **Messaging message marked spam** → STOP, change template, wait 24h
 - **Lead says "ahora no"** → record + pause 14 days; don't follow up in < 14d
 - **Lead gives pricing pushback > 30%** → escalate to Kiki, don't negotiate alone
 - **Lead asks for legal docs** → STOP sales, hand to Ivan

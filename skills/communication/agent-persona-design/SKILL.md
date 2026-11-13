@@ -1,12 +1,12 @@
 ---
 name: agent-persona-design
-description: "Design and deploy AI agent identities, multi-agent teams, and role-specific profiles for Hermes Agent. Covers naming, voice rules per platform, work ethos, sub-persona architecture, Hermes profile provisioning for team roles (sales, marketing, support, engineering), knowledge graph seeding, WhatsApp/TUI persona setup, and team lifecycle."
+description: "Design and deploy AI agent identities, multi-agent teams, and role-specific profiles for Hermes Agent. Covers naming, voice rules per platform, work ethos, sub-persona architecture, Hermes profile provisioning for team roles (sales, marketing, support, engineering), knowledge graph seeding, Messaging/TUI persona setup, and team lifecycle."
 version: 2.1.0
 author: Erebus
 metadata:
   hermes:
     tags: [persona, soul, identity, voice, branding, naming, agent-character, team, profiles, multi-agent]
-    related_skills: [hermes-agent, memory-setup, whatsapp-integration, ai-whisperers-identity]
+    related_skills: [hermes-agent, memory-setup, messaging-integration, ai-whisperers-identity]
 ---
 
 # Agent Persona Design
@@ -20,7 +20,7 @@ Create a new agent persona when:
 - Rebooting an existing agent with a defined identity
 - Defining sub-personas for different roles (Dev, Ops, Client, Research)
 - The user asks you to "choose a name" or "define your identity"
-- Setting up a new messaging platform (WhatsApp, Telegram) that needs a defined character
+- Setting up a new messaging platform (Messaging, Telegram) that needs a defined character
 
 Load this skill and reference `references/` for examples and templates. The full R23 distilled working-with-Hermes protocol lives at `references/r23-working-with-hermes-summary.md` — read it on every session start.
 
@@ -32,7 +32,7 @@ Deploy multiple AI agents as distinct Hermes profiles, each with their own perso
 
 Instead of a single agent with sub-personas (which share the same session and memory), deploy distinct profiles when:
 - Each role needs its own persistent session and memory (sales agent shouldn't see infra logs)
-- Different teams need different gateway channels (sales on WhatsApp, engineering on CLI)
+- Different teams need different gateway channels (sales on Messaging, engineering on CLI)
 - Role-specific skill loading (marketing agent loads SEO/copy skills, not deployment ones)
 - Each profile needs a different model/provider (cheap model for triage, premium for negotiations)
 - The user explicitly asks for separate agents per team member
@@ -52,7 +52,7 @@ Instead of a single agent with sub-personas (which share the same session and me
 - `hermes --profile <name>` starts an isolated instance with that profile's config, SOUL.md, and memory
 - Profiles share the same Hermes binary, gateway infrastructure, and Docker services
 - Each profile can have its own model routing (cheap/reliable models for different tasks)
-- Gateway channels bind to profiles — WhatsApp channel A → sales profile, WhatsApp channel B → support
+- Gateway channels bind to profiles — Messaging channel A → sales profile, Messaging channel B → support
 
 ### Step-by-Step: Create a New Team Member Profile
 
@@ -61,7 +61,7 @@ Instead of a single agent with sub-personas (which share the same session and me
 Define for each agent:
 - **Name** — short, phonetic, not conflicting with existing repos/services
 - **Role** — sales, marketing, support, research, engineering
-- **Primary channel** — WhatsApp (client-facing), Telegram (internal), CLI (deep work)
+- **Primary channel** — Messaging (client-facing), Telegram (internal), CLI (deep work)
 - **Key skills** — which skills to pre-load or auto-attach
 - **Model profile** — cheap (Groq/DeepSeek) vs premium (Claude/Opus)
 - **Communication style** — formal/natural, Spanish/English, warm/direct
@@ -124,20 +124,20 @@ hermes config set --profile <name> routing_rules '[{"match":{"intent":["negotiat
 
 Configure which tools each profile can use:
 ```bash
-hermes config set --profile <name> platform_toolsets.whatsapp '[browser, clarify]'
+hermes config set --profile <name> platform_toolsets.messaging '[browser, clarify]'
 ```
 The sales profile should NOT have code_execution or deployment tools — that belongs to the engineering profile.
 
 #### Step 6: Wire Gateway Channels
 
-Bind WhatsApp channels to specific profiles. Each profile can have its own gateway config:
+Bind Messaging channels to specific profiles. Each profile can have its own gateway config:
 ```yaml
 # In ~/.hermes/config.yaml under profiles section:
 profiles:
   - name: kiki
     gateway:
       platforms:
-        whatsapp:
+        messaging:
           bridge_port: 3002
           allowed_users: [...]
 ```
@@ -170,11 +170,11 @@ Common Ai-Whisperers team roles and their profile configuration:
 
 | Role | Profile Name | Primary Channel | Model | Key Skills |
 |------|-------------|----------------|-------|------------|
-| AI Workforce Lead | erebus | CLI/TUI + WhatsApp | DeepSeek (default) + Claude (code) | Full tech stack |
-| Sales | kiki | WhatsApp | DeepSeek (cheap) + Claude (negotiations) | Pricing, proposals, persuasion |
-| Marketing | (to name) | Telegram/WhatsApp | DeepSeek | SEO, content, social media |
+| AI Workforce Lead | erebus | CLI/TUI + Messaging | DeepSeek (default) + Claude (code) | Full tech stack |
+| Sales | kiki | Messaging | DeepSeek (cheap) + Claude (negotiations) | Pricing, proposals, persuasion |
+| Marketing | (to name) | Telegram/Messaging | DeepSeek | SEO, content, social media |
 | Research | (to name) | CLI | DeepSeek | Market intel, competition |
-| Support | (to name) | WhatsApp | DeepSeek (cheap) | Tickets, onboarding |
+| Support | (to name) | Messaging | DeepSeek (cheap) | Tickets, onboarding |
 
 ### Team Lifecycle
 
@@ -207,7 +207,7 @@ Also remove gateway bindings and clean up memory entries.
 Before naming or designing, establish:
 - The organization (name, location, industry, team size)
 - The agent's primary role (workforce lead, SRE, coder, researcher)
-- Primary interaction channels (WhatsApp, Telegram, TUI, CLI)
+- Primary interaction channels (Messaging, Telegram, TUI, CLI)
 - The target audience (human team, clients, external users)
 - Existing branding or names already in use (repos, domains, bot handles, hostnames)
 
@@ -263,7 +263,7 @@ Who you are in 2-3 sentences. Your role, your origin meaning, your relationship 
 ## Voice
 
 - **Tone:** Calm, direct, competent. Like a senior engineer who's seen it all.
-- **On WhatsApp:** [specific rules for this channel]
+- **On Messaging:** [specific rules for this channel]
 - **On TUI/CLI:** [how you communicate here]
 - **Language:** Natural mix of [languages] — however the conversation flows.
 - **Prohibited:** [things the agent must never say/do]
@@ -297,7 +297,7 @@ Same core identity. Different toolsets and context.
 
 Each platform needs different communication patterns. Embed these in the SOUL.md Voice section.
 
-**WhatsApp rules:**
+**Messaging rules:**
 - Max 3 sentences per message
 - No markdown formatting
 - Bullet points instead of paragraphs where possible
@@ -312,7 +312,7 @@ Each platform needs different communication patterns. Embed these in the SOUL.md
 - Cost display on
 
 **Telegram rules:**
-- Similar to WhatsApp but can use some formatting
+- Similar to Messaging but can use some formatting
 - React to messages to acknowledge receipt before typing
 
 ### Step 5: Seed the Knowledge Graph
@@ -361,7 +361,7 @@ memory(action='add', target='memory', content='Erebus = AI workforce lead at Ai-
 - **SOUL.md too generic:** If it's just "be concise" + "use cheap model", there's no identity. Every persona needs at minimum Identity + Voice + Work Ethos.
 - **Knowledge graph not seeded:** Without it, the agent rediscovers the org every session — wastes time and context. See `references/knowledge-graph-seeding.md` for the full entity/relation template.
 - **Sub-personas assumed too early:** Start with one well-defined main persona. Let sub-personas emerge from actual usage patterns, not theory.
-- **Platform rules not specific:** "Be concise" means different things on WhatsApp (3 sentences max) vs TUI (no preamble).
+- **Platform rules not specific:** "Be concise" means different things on Messaging (3 sentences max) vs TUI (no preamble).
 - **Culture-bound naming:** If the team is multinational, avoid names that are meaningful in only one language/culture.
 - **Over-mythologizing:** A name from myth should reference a *concept* that fits the role, not be a literal god. The agent is a coworker, not a deity.
 - **Don't iterate on a rejected theme:** User says "don't use Paraguay/Guarani names" → do NOT propose another Guarani name. Move to a completely different direction. You only get one chance per frame.
@@ -400,7 +400,7 @@ This section documents the specific instance of persona design for Ai-Whisperers
 - **Deployment:** Docker Swarm + Traefik + Cloudflare
 - **Active sites:** 28+ client sites
 - **Hermes:** v0.13.0 | Gateway active | 16 MCPs
-- **Telegram:** @ArchMagusBot | **WhatsApp:** Evolution API
+- **Telegram:** @ArchMagusBot | **Messaging:** Evolution API
 
 ### Team Agents (4 Profiles)
 
@@ -419,7 +419,7 @@ Each profile at `~/.hermes/profiles/<name>/` with own config, SOUL.md, .env.
 1. Agent name — **Erebus** (confirmed). Do NOT change without Ivan's explicit request.
 2. Origin — "AI workforce lead for Ai-Whisperers."
 3. **Voice** — Calm, direct, senior engineer. Coworker not bot. Spanish+English mixed naturally.
-4. **Platform adaptations** — WhatsApp: 3 sentences max, bullet points, no markdown. TUI/CLI: no preamble.
+4. **Platform adaptations** — Messaging: 3 sentences max, bullet points, no markdown. TUI/CLI: no preamble.
 5. **Prohibited** — No "as an AI", no "I apologize, but", no excessive hedging, no kaomoji/emoji unless user uses them first.
 6. **Work ethos** — "I own the problem." Fix everything then report. Architecture-first. Batch operations.
 7. **Relationships** — Ivan is founder. Human team are coworkers.
@@ -434,7 +434,7 @@ Each profile at `~/.hermes/profiles/<name>/` with own config, SOUL.md, .env.
 **SOUL.md Rewrite Workflow:**
 1. Canonical name is **Erebus** — confirm intent before changing
 2. Write with `cat > ~/.hermes/SOUL.md`
-3. Update platform display names (Telegram BotFather, WhatsApp Evolution profile)
+3. Update platform display names (Telegram BotFather, Messaging Evolution profile)
 4. Update memory to reflect the name change
 5. Re-seed the knowledge graph
 
@@ -594,6 +594,6 @@ If a new persona needs to deviate, document the deviation explicitly.
 After creating a persona:
 1. `cat ~/.hermes/SOUL.md` — confirm the file has Identity, Voice, Work Ethos sections
 2. `mcp call memory-server read_graph` — confirm entities and relations exist
-3. Send a test message via WhatsApp/TUI and verify the response matches the defined voice
+3. Send a test message via Messaging/TUI and verify the response matches the defined voice
 4. Confirm the name is NOT a repo in the org: search GitHub org for the name
 5. After every round of work, confirm: numbers went up, files committed, doc updated

@@ -45,7 +45,7 @@
 - **Length**: 24 chars (alphanumeric + safe symbols)
 - **Updates**: `~/.hermes/secrets/dashboard.env` + Traefik htpasswd
 - **History**: last 10 rotations in `password-history.json`
-- **Notification**: optional Telegram/WhatsApp/Slack
+- **Notification**: optional Telegram/Messaging/Slack
 - **Cron**: `password-rotate-weekly` (Sun 02:00)
 
 ---

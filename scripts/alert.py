@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Read the latest client-sites-health.json and post a digest to WhatsApp via
+Read the latest client-sites-health.json and post a digest to Messaging via
 the existing bridge. No-op if there are zero failures.
 
 Usage:
@@ -19,11 +19,11 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 DEFAULT_STATE = Path.home() / ".hermes" / "state" / "client-sites-health.json"
-BRIDGE_URL = os.environ.get("WHATSAPP_BRIDGE_URL", "http://127.0.0.1:3000")
-TO = os.environ.get("WHATSAPP_ALERT_TO", "")  # E.164 like 59599xxxxxxx
+BRIDGE_URL = os.environ.get("MESSAGING_BRIDGE_URL", "http://127.0.0.1:3000")
+TO = os.environ.get("MESSAGING_ALERT_TO", "")  # E.164 like 59599xxxxxxx
 
 
-def post_whatsapp(to: str, text: str) -> tuple[int, str]:
+def post_messaging(to: str, text: str) -> tuple[int, str]:
     body = json.dumps({"to": to, "message": text}).encode("utf-8")
     req = urllib.request.Request(
         f"{BRIDGE_URL}/send",
@@ -72,12 +72,12 @@ def main() -> int:
     msg = "\n".join(lines)
     print(msg)
     if args.dry_run:
-        print("\n[dry-run] would send via WhatsApp")
+        print("\n[dry-run] would send via Messaging")
         return 0
     if not TO:
-        print("\nWHATSAPP_ALERT_TO not set — skipping send")
+        print("\nMESSAGING_ALERT_TO not set — skipping send")
         return 0
-    code, body = post_whatsapp(TO, msg)
+    code, body = post_messaging(TO, msg)
     print(f"\nposted: {code} | {body}")
     return 0 if code in (200, 201) else 1
 

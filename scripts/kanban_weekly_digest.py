@@ -13,7 +13,7 @@ Outputs to stdout (cron delivers verbatim in no-agent mode).
 Usage:
   kanban_weekly_digest.py                  # current week (Mon..today)
   kanban_weekly_digest.py --week 2026-07-20 # ISO Monday of the week to summarize
-  kanban_weekly_digest.py --send           # send to WhatsApp home + write to inbox
+  kanban_weekly_digest.py --send           # send to Messaging home + write to inbox
 """
 import argparse
 import sqlite3
@@ -253,7 +253,7 @@ def format_digest(week_start: int, week_end: int) -> str:
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--week", help="ISO date (any day in the week). Default: today.")
-    parser.add_argument("--send", action="store_true", help="Save to ~/.hermes/inbox/ and send via WhatsApp")
+    parser.add_argument("--send", action="store_true", help="Save to ~/.hermes/inbox/ and send via Messaging")
     args = parser.parse_args()
 
     if args.week:
@@ -272,11 +272,11 @@ def main():
         INBOX.mkdir(parents=True, exist_ok=True)
         fname = f"kanban-digest-{datetime.fromtimestamp(week_start).strftime('%Y-%m-%d')}.md"
         (INBOX / fname).write_text(digest)
-        # Send to WhatsApp home channel
+        # Send to Messaging home channel
         # Compact version for messaging
         compact = digest[:3000] + ("\n..." if len(digest) > 3000 else "")
         subprocess.run(
-            ["hermes", "send", "-t", "whatsapp", "-q", f"📊 *Weekly kanban digest*\n\n{compact}"],
+            ["hermes", "send", "-t", "messaging", "-q", f"📊 *Weekly kanban digest*\n\n{compact}"],
             capture_output=True, text=True
         )
 

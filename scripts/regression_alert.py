@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-regression_alert.py — Detect regressions and alert via Telegram/WhatsApp.
+regression_alert.py — Detect regressions and alert via Telegram/Messaging.
 
 Runs snapshot_diff across all repos, and if any regressions are found,
 sends a digest via hermes send to the configured chat.
@@ -8,10 +8,10 @@ sends a digest via hermes send to the configured chat.
 Usage:
     python3 ~/.hermes/scripts/regression_alert.py
     python3 ~/.hermes/scripts/regression_alert.py --dry-run
-    python3 ~/.hermes/scripts/regression_alert.py --target whatsapp
+    python3 ~/.hermes/scripts/regression_alert.py --target messaging
     python3 ~/.hermes/scripts/regression_alert.py --target telegram
 
-Targets: whatsapp (default), telegram, slack
+Targets: messaging (default), telegram, slack
 """
 from __future__ import annotations
 
@@ -82,8 +82,8 @@ def send(target: str, message: str) -> dict:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Detect regressions and alert via Telegram/WhatsApp")
-    parser.add_argument("--target", default="whatsapp", choices=["whatsapp", "telegram", "slack"], help="Delivery target")
+    parser = argparse.ArgumentParser(description="Detect regressions and alert via Telegram/Messaging")
+    parser.add_argument("--target", default="messaging", choices=["messaging", "telegram", "slack"], help="Delivery target")
     parser.add_argument("--compare", default="1d", help="Comparison window (1d, 7d, 30d)")
     parser.add_argument("--dry-run", action="store_true", help="Don't send, just print")
     parser.add_argument("--json", action="store_true", help="JSON output")
